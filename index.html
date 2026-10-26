@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ronit Mehta | Backend Software Engineer</title>
+<meta name="description" content="Ronit Mehta, backend engineer at National Australia Bank. I build Spring Boot microservices and distributed systems on AWS and GCP that scale with load and recover when parts fail.">
+<meta name="author" content="Ronit Mehta">
+<meta name="theme-color" content="#030014">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230a1030'/%3E%3Cg fill='none' stroke='%2367e8f9' stroke-width='3'%3E%3Cellipse cx='32' cy='32' rx='23' ry='9'/%3E%3Cellipse cx='32' cy='32' rx='23' ry='9' transform='rotate(60 32 32)'/%3E%3Cellipse cx='32' cy='32' rx='23' ry='9' transform='rotate(120 32 32)'/%3E%3C/g%3E%3Ccircle cx='32' cy='32' r='5.5' fill='%23a5f3fc'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Loaded without blocking the first paint: the page shows in system fonts until these arrive. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>
+:root { --bg: #030014; --violet: #7042f8; --line: #2a0e61; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* The background lives on html only, so the fixed star canvas (z-index -1) paints above it. */
+html { background: var(--bg); scroll-behavior: smooth; scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; color: #fff; line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+img, svg, canvas { display: block; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid #a78bfa; outline-offset: 3px; border-radius: 6px; }
+section { scroll-margin-top: 70px; }
+.grad { background: linear-gradient(to right, #a855f7, #06b6d4); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cursive { font-family: "Cedarville Cursive", cursive; }
+.icon { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+#stars { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+/* Badge and buttons */
+.badge { isolation: isolate; position: relative; overflow: hidden; display: flex; align-items: center; width: max-content; padding: 8px 14px 8px 9px; border: 1px solid #7042f88b; border-radius: 32px; opacity: .9; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: inset 0 -7px 11px #a48fff1f; transition: box-shadow .45s cubic-bezier(.6, .6, 0, 1); }
+.badge:hover { box-shadow: inset 0 -7px 20px #a48fff40; }
+.badge > svg { width: 20px; height: 20px; margin-right: 10px; color: #b49bff; fill: currentColor; }
+.badge-text { font-size: 13px; background: linear-gradient(#fff6, #fff6), linear-gradient(90.01deg, #e59cff .01%, #ba9cff 50.01%, #9cb2ff 100%); background-blend-mode: normal, screen; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.btn { display: block; width: 200px; max-width: 100%; padding: 8px 0; text-align: center; color: #fff; border-radius: 8px; background: linear-gradient(#3c087e00, #3c087e52), #712fff1f; box-shadow: inset 0 0 12px #bf97ff3d; transition: background .3s, box-shadow .3s; }
+.btn:hover { background: linear-gradient(#3c087e00, #3c087e6b), #712fff3d; box-shadow: inset 0 0 12px #bf97ff70; }
+.btn-ghost { background: transparent; box-shadow: inset 0 0 0 1px #7042f88b; }
+.btn-ghost:hover { background: #712fff1f; box-shadow: inset 0 0 0 1px #a78bfa; }
+.cta { display: flex; flex-wrap: wrap; gap: 14px; }
+
+/* Navbar */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 65px; padding: 0 40px; background: #03001427; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 10px 15px -3px #2a0e6180, 0 4px 6px -4px #2a0e6180; }
+.nav-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; }
+.brand { display: flex; align-items: center; color: #d1d5db; }
+.brand span { margin-left: 14px; }
+.logo { width: 44px; height: 44px; filter: drop-shadow(0 0 8px #22d3ee88); }
+.orbits { transform-origin: 32px 32px; animation: spin 24s linear infinite; }
+.menu { display: flex; align-items: center; justify-content: space-between; width: 500px; margin-right: 80px; padding: 10px 20px; border-radius: 999px; background: #0300145e; color: #e5e7eb; }
+.menu a, .drawer a { transition: color .2s; }
+.menu a:hover, .drawer a:hover { color: var(--violet); }
+.socials { display: flex; gap: 20px; }
+.socials .icon { width: 24px; height: 24px; transition: color .2s; }
+.socials a:hover .icon { color: #b49bff; }
+.burger { display: none; font-size: 34px; line-height: 1; }
+.drawer { display: none; position: absolute; top: 65px; left: 0; width: 100%; padding: 20px; background: var(--bg); flex-direction: column; align-items: center; gap: 16px; color: #d1d5db; }
+.drawer.open { display: flex; }
+
+/* Hero */
+.hero { position: relative; padding: 160px 0 40px; }
+#hole { position: absolute; top: 0; left: 0; width: 100%; height: 640px; z-index: -1; pointer-events: none; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+.hero-inner { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 0 80px; }
+.hero-copy { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.hero h1 { margin-top: 24px; max-width: 600px; font-size: 60px; line-height: 1; font-weight: 500; }
+.hero h1 .grad { white-space: nowrap; }
+.lead { max-width: 600px; margin: 20px 0; font-size: 18px; line-height: 28px; color: #9ca3af; }
+.hero-art { flex: 1; display: flex; justify-content: center; align-items: center; }
+.wheel { width: 100%; max-width: 650px; height: auto; user-select: none; }
+.tiles rect { fill: url(#w-tile); stroke: #ffffff26; }
+.tiles .dim { opacity: .45; }
+.float { animation: float 7s ease-in-out infinite; }
+
+/* Section titles and tags */
+.title { padding: 80px 20px 60px; font-size: 40px; font-weight: 600; text-align: center; }
+.sub { max-width: 720px; margin: -36px 0 48px; padding: 0 20px; font-size: 18px; color: #9ca3af; text-align: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { padding: 4px 11px; border: 1px solid #7042f855; border-radius: 999px; background: #7042f814; font-size: 12px; color: #ddd6fe; }
+
+/* Experience */
+.exp { display: flex; flex-direction: column; align-items: center; padding: 0 40px; }
+.job { width: 100%; }
+.job-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.job-head h3 { font-size: 26px; font-weight: 600; }
+.org { margin-top: 4px; color: #c4b5fd; }
+.when { padding: 6px 14px; border: 1px solid #7042f88b; border-radius: 999px; font-size: 13px; color: #ddd6fe; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 28px 0; }
+.stat { padding: 18px 20px; border-radius: 10px; background: linear-gradient(#3c087e00, #3c087e40), #712fff12; box-shadow: inset 0 0 12px #bf97ff2e; }
+.stat b { font-size: 34px; line-height: 1.2; font-weight: 700; }
+.stat span { display: block; margin-top: 4px; font-size: 14px; color: #d1d5db; }
+.roles { display: flex; flex-direction: column; gap: 28px; }
+.row:hover, .award:hover { border-color: #7042f8aa; box-shadow: 0 0 30px #7042f833; }
+
+/* Skills */
+.skills { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 80px 0; transform: scale(.9); }
+.skills-head { display: flex; flex-direction: column; align-items: center; padding: 0 20px; }
+.skills-head h2 { margin: 10px 0 15px; font-size: 30px; font-weight: 500; text-align: center; }
+.skills-head .tag { margin: 10px 0 20px; font-size: 20px; color: #e5e7eb; text-align: center; }
+#skill-rows { display: flex; flex-direction: column; align-items: center; }
+.skill-group { display: flex; flex-direction: column; align-items: center; margin-top: 26px; }
+.skill-label { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #a78bfa; text-align: center; }
+.skill-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 28px; margin-top: 14px; padding: 0 20px; }
+.skill { object-fit: contain; opacity: 0; transition: opacity .6s ease, transform .3s ease; }
+.skill.in { opacity: 1; }
+.skill:hover { transform: translateY(-4px) scale(1.06); }
+.skills .chips { justify-content: center; max-width: 880px; margin-top: 14px; padding: 0 20px; }
+.planet-wrap { position: absolute; inset: 0; z-index: -1; opacity: .3; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.planet { width: min(68vw, 620px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 40% 34%, #c4b5fd 0, #7c3aed 14%, #3b1a8a 34%, #1e104766 54%, transparent 70%); filter: blur(6px); }
+.rays { position: absolute; width: min(120vw, 1200px); aspect-ratio: 1; background: repeating-conic-gradient(from 0deg, #a78bfa30 0 2deg, transparent 2deg 11deg); -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 60%); mask-image: radial-gradient(circle, #000 18%, transparent 60%); animation: spin 140s linear infinite; }
+
+/* Projects */
+.projects { display: flex; flex-direction: column; align-items: center; padding: 0 0 80px; }
+.cards { display: flex; flex-direction: column; gap: 28px; width: 100%; padding: 0 40px; }
+.hook { margin-top: 12px; font-size: 17px; line-height: 1.45; font-weight: 600; color: #fff; }
+.mini-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 240px)); gap: 12px; margin-top: 16px; }
+.mini-stats div { padding: 12px 14px; border-radius: 10px; background: linear-gradient(#3c087e00, #3c087e40), #712fff12; box-shadow: inset 0 0 12px #bf97ff2e; }
+.mini-stats b { font-size: 26px; line-height: 1.2; font-weight: 700; }
+.mini-stats span { display: block; margin-top: 2px; font-size: 13px; color: #d1d5db; }
+.more { display: flex; align-items: center; gap: 6px; width: max-content; margin-top: 14px; font-size: 14px; color: #c4b5fd; }
+
+/* Rows: each role or project spans the full width over its blueprint; "View architecture" brings the drawing forward */
+.row { position: relative; isolation: isolate; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background-color: #050826;
+  background-image: linear-gradient(#67e8f90c 1px, transparent 1px), linear-gradient(90deg, #67e8f90c 1px, transparent 1px); background-size: 48px 48px;
+  transition: border-color .3s, box-shadow .3s; }
+.row > .arch { position: absolute; top: 0; right: 0; bottom: 0; z-index: -1; width: 60%; display: flex; align-items: center; justify-content: flex-end; border: 0; background: none; opacity: .18;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); mask-image: linear-gradient(90deg, transparent, #000 45%); transition: opacity .4s; }
+.row > .arch svg { width: auto; max-width: 100%; height: 100%; }
+.row.flip > .arch { right: auto; left: 0; justify-content: flex-start; -webkit-mask-image: linear-gradient(270deg, transparent, #000 45%); mask-image: linear-gradient(270deg, transparent, #000 45%); }
+.row-body { display: flex; flex-direction: column; max-width: 1100px; padding: 30px 34px; transition: opacity .3s, visibility 0s; }
+.row-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.row h3, .row h4 { font-size: 22px; line-height: 1.3; font-weight: 600; }
+.row-side { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.row-when { font-size: 13px; color: #a78bfa; }
+.arch-btn, .back { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border: 1px solid #67e8f966; border-radius: 999px; background: #67e8f90f; font: 600 12px var(--mono); letter-spacing: .03em; color: #a5f3fc; transition: background .2s, border-color .2s; }
+.arch-btn:hover, .back:hover { background: #67e8f924; border-color: #67e8f9; }
+.arch-btn .icon { width: 14px; height: 14px; }
+.row ul { margin: 14px 0 0 18px; font-size: 15px; line-height: 1.65; color: #d1d5db; }
+.row li + li { margin-top: 8px; }
+.row li::marker { color: #a78bfa; }
+.row .chips { padding-top: 18px; }
+.row-lit { position: absolute; top: 0; bottom: 0; left: 0; width: 40%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 12px; padding: 30px 34px; opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s linear .3s; }
+.row.flip .row-lit { left: auto; right: 0; }
+.lit-title { font-size: 22px; line-height: 1.3; font-weight: 600; }
+.lit-hint { font-size: 14px; color: #9ca3af; }
+.row-lit .try { margin: 0; }
+@media (min-width: 768px) { .row:not(.lit) > .arch text { opacity: 0; } }
+.row > .arch text { transition: opacity .4s; }
+.row.lit > .arch { opacity: 1; -webkit-mask-image: none; mask-image: none; }
+.row.lit .row-body { opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s linear .3s; }
+.row.lit .row-lit { opacity: 1; visibility: visible; transition: opacity .3s, visibility 0s; }
+
+/* Architecture drawings: a blueprint of each system at the top of its card, with results called out in pink */
+.arch { margin: 0; border-bottom: 1px solid #67e8f933; background-color: #060a28;
+  background-image: linear-gradient(#67e8f912 1px, transparent 1px), linear-gradient(90deg, #67e8f912 1px, transparent 1px), linear-gradient(#67e8f907 1px, transparent 1px), linear-gradient(90deg, #67e8f907 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px; }
+.arch svg { width: 100%; height: auto; font-family: var(--mono); }
+.arch .fig { font-size: 7.5px; letter-spacing: .14em; fill: #67e8f9; }
+.arch .box { fill: #0a1036; stroke: #67e8f9; stroke-width: 1.3; }
+.arch .hub { fill: #10184a; stroke-width: 2; }
+.arch .zone { fill: none; stroke: #67e8f9; stroke-opacity: .4; stroke-dasharray: 5 4; }
+.arch .wire { fill: none; stroke: #67e8f9; stroke-opacity: .6; stroke-width: 1.2; }
+.arch .ctl { fill: none; stroke: #67e8f9; stroke-opacity: .4; stroke-dasharray: 2 3; }
+.arch .t { font-size: 10px; font-weight: 700; fill: #e0f2fe; text-anchor: middle; }
+.arch .s { font-size: 8px; fill: #a5f3fc; text-anchor: middle; }
+.arch .note { font-size: 7px; fill: #67e8f9; }
+.arch .co path { fill: none; stroke: #f0abfc; stroke-width: 1.1; }
+.arch .co circle { fill: #f0abfc; }
+.arch .ct { font-size: 9px; font-weight: 700; fill: #f5d0fe; }
+.arch .cs { font-size: 7.5px; fill: #f0abfc; }
+.arch .dim path { fill: none; stroke: #67e8f9; stroke-opacity: .55; }
+.arch .dim text { font-size: 7.5px; letter-spacing: .06em; fill: #a5f3fc; text-anchor: middle; }
+.flow { stroke-dasharray: 3 6; animation: flow 1.1s linear infinite; }
+.ping, .turn { transform-box: fill-box; transform-origin: center; }
+.ping { animation: ping 2.2s ease-out infinite; }
+.turn { animation: spin 18s linear infinite; }
+
+/* Playable diagrams: buttons under the Raft and MapReduce previews switch their state */
+.try { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin: -4px 0 14px; }
+.try button { padding: 6px 14px; border-radius: 999px; background: linear-gradient(#3c087e00, #3c087e52), #712fff3d; box-shadow: inset 0 0 12px #bf97ff70; font-size: 13px; font-weight: 600; color: #fff; transition: background .2s; }
+.try button:hover { background: linear-gradient(#3c087e00, #3c087e6b), #712fff5c; }
+.try button.ghost { background: transparent; box-shadow: inset 0 0 0 1px #7042f88b; }
+.try-status { flex-basis: 100%; min-height: 40px; font-size: 13px; color: #d1d5db; }
+.try-status b { color: #fff; }
+.raft svg *, .mr svg * { transition: opacity .45s; }
+.raft .e-new, .raft .cand, .raft .lbl-down, .raft .lbl-new, .raft .ft-crash, .raft .ft-new { opacity: 0; }
+.raft:not([data-state="ok"]) .e-old, .raft:not([data-state="ok"]) .lease, .raft:not([data-state="ok"]) .lbl-ok, .raft:not([data-state="ok"]) .ft-ok, .raft:not([data-state="ok"]) .co-lease, .raft[data-state="elected"] .lbl-f2 { opacity: 0; }
+.raft:not([data-state="ok"]) .lbl-down, .raft[data-state="crashed"] .cand, .raft[data-state="crashed"] .ft-crash, .raft[data-state="elected"] .e-new, .raft[data-state="elected"] .lbl-new, .raft[data-state="elected"] .ft-new { opacity: 1; }
+.raft[data-state="crashed"] .cand { animation: blink .7s ease-in-out infinite; }
+.raft .n0 circle, .raft .n2 circle, .mr .m2 rect, .mr .m3 rect { transition: fill .4s, stroke .4s; }
+.raft:not([data-state="ok"]) .n0 circle { fill: #2a0a12; stroke: #f87171; }
+.raft .n2 { transform-box: fill-box; transform-origin: center; transition: transform .45s cubic-bezier(.3, 1.4, .5, 1); }
+.raft[data-state="elected"] .n2 { transform: scale(1.35); }
+.raft[data-state="elected"] .n2 circle { fill: #10184a; stroke: #a5f3fc; stroke-width: 2; }
+.mr .m3-dead, .mr .moved, .mr .ft-killed, .mr .ft-done { opacity: 0; }
+.mr:not([data-state="ok"]) .m3-flows, .mr:not([data-state="ok"]) .ft-ok { opacity: 0; }
+.mr:not([data-state="ok"]) .m3-dead, .mr:not([data-state="ok"]) .moved, .mr[data-state="killed"] .ft-killed, .mr[data-state="done"] .ft-done { opacity: 1; }
+.mr:not([data-state="ok"]) .m3 rect { fill: #2a0a12; stroke: #f87171; }
+.mr:not([data-state="ok"]) .m2 rect { stroke: #fbbf24; }
+
+/* Education and achievements */
+.awards { display: flex; flex-direction: column; align-items: center; padding: 0 40px 80px; }
+.award-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
+.award { padding: 22px; border: 1px solid var(--line); border-radius: 10px; background: #03001466; transition: border-color .3s, box-shadow .3s; }
+.award .icon { width: 28px; height: 28px; margin-bottom: 14px; color: #b49bff; }
+.award h3 { font-size: 17px; line-height: 1.35; font-weight: 600; }
+.award p { margin-top: 6px; font-size: 14px; color: #9ca3af; }
+
+/* Closing call to action */
+.contact { display: flex; flex-direction: column; align-items: center; padding: 0 20px 100px; }
+.contact .title { padding: 20px 20px 32px; }
+
+/* Footer */
+footer { padding: 15px; color: #e5e7eb; }
+.foot-cols { display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start; row-gap: 18px; }
+.foot-col { min-width: 200px; display: flex; flex-direction: column; align-items: center; }
+.foot-col h3 { font-size: 16px; font-weight: 700; }
+.foot-col a { display: flex; align-items: center; margin: 15px 0; font-size: 15px; transition: color .2s; }
+.foot-col a:hover { color: #b49bff; }
+.foot-col .icon { width: 15px; height: 15px; margin-right: 6px; }
+.copy { margin: 20px 0; font-size: 15px; text-align: center; }
+
+/* Entrance animations: slide in from the left, right or top, 100px over half a second */
+[data-anim] { opacity: 0; }
+[data-anim].go { animation: .5s cubic-bezier(.25, .8, .35, 1) var(--d, 0s) both; }
+[data-anim="left"].go { animation-name: from-left; }
+[data-anim="right"].go { animation-name: from-right; }
+[data-anim="top"].go { animation-name: from-top; }
+@keyframes from-left { from { opacity: 0; transform: translateX(-100px); } to { opacity: 1; transform: none; } }
+@keyframes from-right { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: none; } }
+@keyframes from-top { from { opacity: 0; transform: translateY(-100px); } to { opacity: 1; transform: none; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes flow { to { stroke-dashoffset: -18; } }
+@keyframes ping { from { transform: scale(1); opacity: .7; } to { transform: scale(1.9); opacity: 0; } }
+@keyframes blink { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+
+@media (max-width: 1023px) {
+  .hero { padding-top: 120px; }
+  .hero-inner { flex-direction: column; padding: 0 24px; }
+  .hero h1 { font-size: 46px; }
+  .wheel { max-width: 460px; }
+  .stats, .award-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .nav { padding: 0 16px; }
+  .menu, .nav .socials, .brand span { display: none; }
+  .burger { display: block; }
+  .hero h1 { font-size: 38px; }
+  .title { font-size: 32px; }
+  .exp, .awards { padding-left: 20px; padding-right: 20px; }
+  .stats { gap: 12px; }
+  .stat { padding: 14px; }
+  .stat b { font-size: 28px; }
+  .award-grid { grid-template-columns: 1fr; }
+  .cards { padding: 0 20px; }
+  .row > .arch, .row.flip > .arch { position: static; width: auto; opacity: 1; border-bottom: 1px solid #67e8f933; -webkit-mask-image: none; mask-image: none; }
+  .row > .arch svg { width: 100%; height: auto; }
+  .arch-btn, .lit-title, .lit-hint, .back { display: none; }
+  .row-lit { position: static; width: auto; padding: 0; opacity: 1; visibility: visible; }
+  .row-lit .try { padding: 14px 18px 0; }
+  .row-body { padding: 18px; }
+}
+@media (max-width: 480px) {
+  .arch .s, .arch .cs, .arch .note { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-anim], .skill { opacity: 1; }
+  [data-anim].go, .float, .orbits, .rays, .flow, .ping, .turn, .raft .cand { animation: none; }
+}
+</style>
+<noscript><style>[data-anim], .skill { opacity: 1; }</style></noscript>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" fill="#67e8f9"/></marker>
+    <marker id="ah-amber" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" fill="#fbbf24"/></marker>
+  </defs>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M9.8 3.5l1.6 4.6 4.6 1.6-4.6 1.6-1.6 4.6-1.6-4.6-4.6-1.6 4.6-1.6zM17.5 13l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9zM17 2.6l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M22 6l-10 7L2 6"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5M22 10v6"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></symbol>
+  <symbol id="i-arch" viewBox="0 0 16 16"><g stroke-width="1.4"><rect x="1.5" y="2" width="5" height="4" rx="1"/><rect x="9.5" y="2" width="5" height="4" rx="1"/><rect x="5.5" y="10" width="5" height="4" rx="1"/><path d="M4 6v2h8V6M8 8v2"/></g></symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#about-me" aria-label="Ronit Mehta, back to top">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="lg-logo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#67e8f9"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+        <circle cx="32" cy="32" r="30" fill="#0a1030"/>
+        <g class="orbits" fill="none" stroke="url(#lg-logo)" stroke-width="2.6">
+          <ellipse cx="32" cy="32" rx="23" ry="9"/><ellipse cx="32" cy="32" rx="23" ry="9" transform="rotate(60 32 32)"/><ellipse cx="32" cy="32" rx="23" ry="9" transform="rotate(120 32 32)"/>
+        </g>
+        <circle cx="32" cy="32" r="5.5" fill="#a5f3fc"/>
+      </svg>
+      <span>Ronit Mehta</span>
+    </a>
+    <nav class="menu" aria-label="Main">
+      <a href="#about-me">About me</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+    </nav>
+    <div class="socials">
+      <a href="https://github.com/ronitmehta" target="_blank" rel="noreferrer noopener" aria-label="GitHub"><svg class="icon"><use href="#i-github"/></svg></a>
+      <a href="mailto:ronitmehta817@gmail.com" aria-label="Email"><svg class="icon"><use href="#i-mail"/></svg></a>
+    </div>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="drawer">☰</button>
+  </div>
+  <div class="drawer" id="drawer">
+    <a href="#about-me">About me</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <div class="socials">
+      <a href="https://github.com/ronitmehta" target="_blank" rel="noreferrer noopener" aria-label="GitHub"><svg class="icon"><use href="#i-github"/></svg></a>
+      <a href="mailto:ronitmehta817@gmail.com" aria-label="Email"><svg class="icon"><use href="#i-mail"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="about-me">
+    <canvas id="hole" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="badge" data-anim="top" style="--d:.1s"><svg aria-hidden="true"><use href="#i-spark"/></svg><p class="badge-text">Backend engineer at National Australia Bank</p></div>
+        <h1 data-anim="left" style="--d:.15s">Distributed systems that <span class="grad">scale</span> and <span class="grad">don't fall over.</span></h1>
+        <p class="lead" data-anim="left" style="--d:.3s">I'm Ronit. I build Spring Boot microservices and distributed systems on AWS and GCP that scale with load and recover when parts fail. One of them took a 3-hour job down to under 30 minutes.</p>
+        <div class="cta" data-anim="left" style="--d:.45s">
+          <a class="btn" href="#experience">See my work</a>
+          <a class="btn btn-ghost" href="mailto:ronitmehta817@gmail.com">Say hello</a>
+        </div>
+      </div>
+      <div class="hero-art" data-anim="right" style="--d:.3s">
+        <svg class="wheel" viewBox="0 0 650 650" role="img" aria-label="Technologies I work with: Java, AWS Lambda, Spring, Kafka, PostgreSQL, gRPC, AWS, Docker, GitHub, Kubernetes and Terraform">
+          <defs>
+            <pattern id="w-grid" width="54" height="54" patternUnits="userSpaceOnUse"><path d="M54 0H0V54" fill="none" stroke="#fff" stroke-opacity=".06"/></pattern>
+            <radialGradient id="w-fade"><stop offset=".35" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+            <mask id="w-mask"><rect width="650" height="650" fill="url(#w-fade)"/></mask>
+            <linearGradient id="w-tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#fff" stop-opacity=".03"/></linearGradient>
+          </defs>
+          <g mask="url(#w-mask)">
+            <rect width="650" height="650" fill="url(#w-grid)"/>
+            <g fill="none" stroke="#fff" stroke-opacity=".13">
+              <circle cx="325" cy="325" r="88"/><circle cx="325" cy="325" r="168"/><circle cx="325" cy="325" r="248"/>
+              <path d="M325 15V635M15 325H635M106 106L544 544M544 106L106 544"/>
+            </g>
+          </g>
+          <g class="tiles" fill="#fff" font-family="Inter, system-ui, sans-serif" font-weight="800" text-anchor="middle">
+            <g transform="translate(203 61)"><g class="float"><rect x="-29" y="-29" width="58" height="58" rx="13"/><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M-12-3h18v6a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M6 0h2.5a3.5 3.5 0 0 1 0 7H5.5"/><path d="M-7-15q2.5 3 0 6M-2-15q2.5 3 0 6M3-15q2.5 3 0 6"/><path d="M-14 14.5h22"/></g></g></g>
+            <g transform="translate(366 102)"><g class="float" style="animation-delay:-1.2s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><path d="M-9 13L4.2-1.3M-6-13h5l11.5 26H14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+            <g transform="translate(282 200)"><g class="float" style="animation-delay:-2.4s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M-12 12C-12-3-3-12 12-12 12 3 3 12-12 12z"/><path d="M-12 12L5-5"/></g></g></g>
+            <g transform="translate(432 253)"><g class="float" style="animation-delay:-3.6s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><g fill="none" stroke="#fff" stroke-width="1.8"><circle cx="-5" cy="-11" r="3.2"/><circle cx="-5" r="4.2"/><circle cx="-5" cy="11" r="3.2"/><circle cx="7" cy="-6" r="3.2"/><circle cx="7" cy="6" r="3.2"/><path d="M-5-7.8v3.6M-5 4.2v3.6M-1.2-1.9L4.1-4.6M-1.2 1.9L4.1 4.6"/></g></g></g>
+            <g transform="translate(177 289)"><g class="float" style="animation-delay:-4.8s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><g fill="none" stroke="#fff" stroke-width="1.8"><ellipse cy="-9" rx="11" ry="4"/><path d="M-11-9v18c0 2.2 4.9 4 11 4s11-1.8 11-4V-9M-11 0c0 2.2 4.9 4 11 4s11-1.8 11-4"/></g></g></g>
+            <g transform="translate(325 337)"><g class="float" style="animation-delay:-.6s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><text y="5.5" font-size="15">gRPC</text></g></g>
+            <g transform="translate(486 368)"><g class="float" style="animation-delay:-1.8s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><text y="2" font-size="15" font-weight="700">aws</text><path d="M-12 8q12 7 24 0M8 6l4.5 1.6-1.4 4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g></g>
+            <g transform="translate(202 448)" class="dim"><g class="float" style="animation-delay:-3s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><path d="M-12-5h5v5h-5zM-6-5h5v5h-5zM0-5h5v5H0zM-6-11h5v5h-5zM0-11h5v5H0z" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M-15 2h26c1.5-2.5 3.5-3.5 5.5-3.2-.8 2.2-2.4 3.2-4.3 3.4C10.5 9.5 4.5 13-3 13c-6 0-10.5-3.5-12-11z"/></g></g>
+            <g transform="translate(354 473)" class="dim"><g class="float" style="animation-delay:-4.2s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><use href="#i-github" x="-14" y="-14" width="28" height="28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+            <g transform="translate(155 596)" class="dim"><g class="float" style="animation-delay:-5.4s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M0-13L10.2-8.1 12.7 2.9 5.6 11.7H-5.6L-12.7 2.9-10.2-8.1z"/><circle r="5.5"/><path d="M0-2.5v-7M2-1.6l5.4-4.3M2.4.6l6.8 1.5M1.1 2.3l3 6.3M-1.1 2.3l-3 6.3M-2.4.6l-6.8 1.5M-2-1.6l-5.4-4.3"/></g></g></g>
+            <g transform="translate(395 593)" class="dim"><g class="float" style="animation-delay:-6.2s"><rect x="-29" y="-29" width="58" height="58" rx="13"/><path d="M-11-12l6 3.5v7l-6-3.5zM-3-7.5l6 3.5v7l-6-3.5zM5-4l6-3.5v7L5 3zM-3 1.5l6 3.5v7l-6-3.5z"/></g></g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="exp" id="experience">
+    <h2 class="title grad" data-anim="top">Experience</h2>
+    <div class="job">
+      <div class="job-head" data-anim="left">
+        <div><h3>Backend Software Engineer</h3><p class="org">National Australia Bank · India</p></div>
+        <span class="when">Aug 2024 – Present</span>
+      </div>
+      <div class="stats" data-anim="left" style="--d:.1s">
+        <div class="stat"><b class="grad" data-count="6" data-suffix="x+">6x+</b><span>faster enrolment processing: 3+ hours down to under 30 minutes</span></div>
+        <div class="stat"><b class="grad" data-range="30,40" data-suffix="%">30–40%</b><span>less compute, because failed batch jobs pick up from a checkpoint instead of starting over</span></div>
+        <div class="stat"><b class="grad" data-count="60" data-suffix="%">60%</b><span>faster delivery, pairing with AI and reviewing every line it wrote</span></div>
+        <div class="stat"><b class="grad" data-count="0" data-from="12">0</b><span>code releases needed to launch a new country</span></div>
+      </div>
+      <div class="roles">
+        <article class="row" data-anim="left" style="--d:.2s">
+          <figure class="arch" aria-hidden="true">
+            <svg viewBox="0 0 420 240">
+              <text class="fig" x="12" y="18">FIG. 1 · INVOICE PROCESSING</text>
+              <rect class="zone" x="86" y="28" width="248" height="126" rx="6"/>
+              <text class="note" x="94" y="40">SPRING BOOT SERVICE · JAVA 17</text>
+              <g class="box">
+                <rect x="10" y="50" width="64" height="34" rx="3"/><rect x="96" y="50" width="66" height="34" rx="3"/><rect x="177" y="50" width="66" height="34" rx="3"/><rect x="258" y="50" width="66" height="34" rx="3"/><rect x="346" y="50" width="64" height="34" rx="3"/>
+                <rect x="96" y="104" width="92" height="34" rx="3"/><rect x="226" y="104" width="98" height="34" rx="3"/>
+                <rect x="104" y="176" width="64" height="26" rx="3"/><rect x="178" y="176" width="64" height="26" rx="3"/><rect x="252" y="176" width="64" height="26" rx="3"/>
+              </g>
+              <g class="wire flow" marker-end="url(#ah)"><path d="M74 67H96"/><path d="M162 67H177"/><path d="M243 67H258"/><path d="M324 67H346"/><path d="M234 84V104"/><path d="M300 104V84"/></g>
+              <path class="ctl" d="M183 84V104M210 154V176M136 168H284M136 168V176M284 168V176"/>
+              <text class="t" x="42" y="64">MS GRAPH</text><text class="s" x="42" y="76">invoices in</text>
+              <text class="t" x="129" y="64">INTAKE</text><text class="s" x="129" y="76">capture</text>
+              <text class="t" x="210" y="64">VALIDATE</text><text class="s" x="210" y="76">27 rules</text>
+              <text class="t" x="291" y="64">EXPORT</text><text class="s" x="291" y="76">validated</text>
+              <text class="t" x="378" y="64">ARIBA</text><text class="s" x="378" y="76">invoices out</text>
+              <text class="t" x="142" y="118">POSTGRESQL</text><text class="s" x="142" y="130">rules · toggles</text>
+              <text class="t" x="275" y="118">EXCEPTIONS</text><text class="s" x="275" y="130">operator review</text>
+              <text class="note" x="230" y="97" text-anchor="end">rule fails</text><text class="note" x="304" y="97">fixed</text>
+              <text class="t" x="136" y="193">KAFKA</text><text class="t" x="210" y="193">AMAZON S3</text><text class="t" x="284" y="193">GRAPHQL</text>
+              <g class="co"><path d="M96 121H82"/><circle cx="96" cy="121" r="2.2"/><path d="M324 121H340"/><circle cx="324" cy="121" r="2.2"/></g>
+              <text class="ct" x="78" y="117" text-anchor="end">0 RELEASES</text><text class="cs" x="78" y="128" text-anchor="end">per new country</text>
+              <text class="ct" x="344" y="117">AUTOMATED</text><text class="cs" x="344" y="128">operators see</text><text class="cs" x="344" y="138">exceptions only</text>
+              <g class="dim"><path d="M10 230H410M10 225V235M410 225V235"/><text x="210" y="223">18 FEATURES · DESIGN → RELEASE · 60% FASTER WITH AI</text></g>
+            </svg>
+          </figure>
+          <div class="row-lit">
+            <p class="lit-title">Invoice Processing Microservice</p>
+            <p class="lit-hint">Each pink callout marks where a result comes from.</p>
+            <button type="button" class="back">← Back to details</button>
+          </div>
+          <div class="row-body">
+          <div class="row-head"><h4>Invoice Processing Microservice</h4><div class="row-side"><span class="row-when">Feb 2026 – Present</span><button type="button" class="arch-btn" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-arch"/></svg>View architecture</button></div></div>
+          <ul>
+            <li>Automated a fully manual accounts-payable workflow, so operators now handle only rule exceptions, by building a Java 17 / Spring Boot service that runs intake, validation, exception handling and export across Microsoft Graph, GraphQL, Kafka, PostgreSQL, S3 and Ariba.</li>
+            <li>Let new countries launch with zero code releases by storing 27 validation rules, their execution order and regional toggles in PostgreSQL.</li>
+            <li>Cut the delivery timeline by 60% by using AI-assisted development in Cursor, while keeping design ownership and reviewing every generated change.</li>
+            <li>Took 18 features from solution design to release by owning design, development and testing end to end, using Agile.</li>
+          </ul>
+          <div class="chips"><span>Java 17</span><span>Spring Boot</span><span>Kafka</span><span>PostgreSQL</span><span>Amazon S3</span><span>GraphQL</span><span>Microsoft Graph</span><span>Ariba</span></div>
+          </div>
+        </article>
+        <article class="row flip" data-anim="right" style="--d:.2s">
+          <figure class="arch" aria-hidden="true">
+            <svg viewBox="0 0 420 240">
+              <text class="fig" x="12" y="18">FIG. 2 · LOYALTY PROGRAM</text>
+              <g class="box">
+                <rect x="10" y="44" width="72" height="34" rx="3"/><rect x="100" y="44" width="76" height="34" rx="3"/><rect x="194" y="44" width="92" height="34" rx="3"/><rect x="326" y="44" width="84" height="34" rx="3"/>
+                <rect x="92" y="104" width="92" height="34" rx="3"/><rect x="326" y="104" width="84" height="34" rx="3"/>
+              </g>
+              <rect class="zone" x="198" y="104" width="84" height="34" rx="3"/>
+              <g class="wire flow" marker-end="url(#ah)"><path d="M82 61H100"/><path d="M176 61H194"/><path d="M286 61H326"/></g>
+              <path class="ctl" d="M138 78V104M240 78V104M368 78V104"/>
+              <text class="note" x="306" y="55" text-anchor="middle">OAUTH 2.0</text>
+              <text class="t" x="46" y="58">AMAZON S3</text><text class="s" x="46" y="70">files in</text>
+              <text class="t" x="138" y="58">AWS LAMBDA</text><text class="s" x="138" y="70">normalise</text>
+              <text class="t" x="240" y="58">SPRING BATCH</text><text class="s" x="240" y="70">enrolment</text>
+              <text class="t" x="368" y="58">PARTNERS</text><text class="s" x="368" y="70">Qantas · Flybuys</text>
+              <text class="t" x="138" y="118">POSTGRESQL</text><text class="s" x="138" y="130">Tokeniser map</text>
+              <text class="t" x="368" y="118">S3 · SSE-KMS</text><text class="s" x="368" y="130">cross-account</text>
+              <path class="wire" d="M206 124H276"/>
+              <path d="M214 120l4 4-4 4-4-4zM230 120l4 4-4 4-4-4zM246 120l4 4-4 4-4-4z" fill="#67e8f9"/>
+              <path d="M260.5 120.5l7 7M267.5 120.5l-7 7" stroke="#f87171" stroke-width="1.6"/>
+              <path d="M262 117C259 108 250 108 247 115" fill="none" stroke="#fbbf24" stroke-width="1.1" marker-end="url(#ah-amber)"/>
+              <g class="co"><path d="M92 121H80"/><circle cx="92" cy="121" r="2.2"/><path d="M240 138V148"/><circle cx="240" cy="138" r="2.2"/><path d="M368 138V148"/><circle cx="368" cy="138" r="2.2"/></g>
+              <text class="ct" x="76" y="114" text-anchor="end">6x+ FASTER</text><text class="cs" x="76" y="125" text-anchor="end">3h+ → &lt;30 min</text><text class="cs" x="76" y="135" text-anchor="end">26k records</text>
+              <text class="ct" x="240" y="158" text-anchor="middle">−30–40% COMPUTE</text><text class="cs" x="240" y="169" text-anchor="middle">resumes from checkpoint</text>
+              <text class="ct" x="368" y="158" text-anchor="middle">SECURE FILES</text><text class="cs" x="368" y="169" text-anchor="middle">multipart · events</text>
+              <g class="dim"><path d="M10 230H410M10 225V235M410 225V235"/><text x="210" y="223">4 MICROSERVICES + SHARED LIBRARY · DOCKER · KUBERNETES</text></g>
+            </svg>
+          </figure>
+          <div class="row-lit">
+            <p class="lit-title">Loyalty Program</p>
+            <p class="lit-hint">Each pink callout marks where a result comes from.</p>
+            <button type="button" class="back">← Back to details</button>
+          </div>
+          <div class="row-body">
+          <div class="row-head"><h4>Loyalty Program</h4><div class="row-side"><span class="row-when">Aug 2024 – Feb 2026</span><button type="button" class="arch-btn" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-arch"/></svg>View architecture</button></div></div>
+          <ul>
+            <li>Cut processing for 26,000 enrolment records from 3+ hours to under 30 minutes (6x+ faster) in production by persisting Tokeniser mappings in PostgreSQL during Lambda data normalisation.</li>
+            <li>Reduced compute by 30–40% while keeping valid records safe through data, service and S3 failures, by adding checkpoint-based Spring Batch recovery and record-level skipping.</li>
+            <li>Integrated two partners, Qantas and Flybuys, securely by implementing OAuth 2.0, generating OpenAPI DTOs, and delivering cross-account multipart S3 transfers plus an SSE-KMS encrypted, event-driven file pipeline.</li>
+            <li>Shipped enrolment, partner integration, reward fulfilment and secure file exchange across four Java / Spring Boot microservices and a shared library, by contributing from design through deployment and maintenance on Docker and Kubernetes.</li>
+          </ul>
+          <div class="chips"><span>Java</span><span>Spring Boot</span><span>Spring Batch</span><span>AWS Lambda</span><span>Amazon S3</span><span>PostgreSQL</span><span>OAuth 2.0</span><span>OpenAPI</span><span>Docker</span><span>Kubernetes</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="skills" id="skills">
+    <div class="skills-head">
+      <div class="badge" data-anim="top" style="--d:.5s"><svg aria-hidden="true"><use href="#i-spark"/></svg><p class="badge-text">Java 17 · Spring Boot · AWS · Kafka</p></div>
+      <h2 data-anim="left" style="--d:.5s">What I build with.</h2>
+      <p class="tag cursive" data-anim="right" style="--d:.5s">Never lose a record. Never process one twice.</p>
+    </div>
+    <div id="skill-rows"></div>
+    <div class="skill-group">
+      <p class="skill-label">Practices &amp; libraries</p>
+      <div class="chips">
+        <span>Microservices</span><span>Distributed systems</span><span>Event-driven architecture</span><span>Domain-driven design</span><span>System design</span><span>REST APIs</span><span>Protocol Buffers</span><span>Spring Batch</span><span>OAuth 2.0</span><span>RBAC</span><span>Resilience4j</span><span>JaVers</span><span>Mockito</span><span>CI/CD</span><span>Infrastructure as Code</span><span>Concurrency</span><span>Fault tolerance</span><span>Idempotency</span><span>Observability</span><span>Generative AI</span><span>NLP</span>
+      </div>
+    </div>
+    <div class="planet-wrap" aria-hidden="true"><div class="rays"></div><div class="planet"></div></div>
+  </section>
+
+  <section class="projects" id="projects">
+    <h2 class="title grad">Projects &amp; research</h2>
+    <p class="sub">A recommender that fills in missing ratings, two systems I built and then tried hard to break, and a published paper.</p>
+    <div class="cards">
+      <article class="row">
+        <figure class="arch" aria-hidden="true">
+          <svg viewBox="0 0 420 240">
+            <defs><pattern id="mv-fill" x="320" y="50" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1.7" fill="#f0abfc"/></pattern></defs>
+            <text class="fig" x="12" y="18">FIG. 3 · HYBRID RECOMMENDER</text>
+            <text class="t" x="70" y="42">RATINGS MATRIX</text><text class="t" x="210" y="42">GENRE GRAPH</text><text class="t" x="350" y="42">FILLED MATRIX</text>
+            <rect class="box" x="40" y="50" width="60" height="60"/><rect class="box" x="320" y="50" width="60" height="60"/>
+            <rect x="320" y="50" width="60" height="60" fill="url(#mv-fill)"/>
+            <path d="M50 50V110M60 50V110M70 50V110M80 50V110M90 50V110M40 60H100M40 70H100M40 80H100M40 90H100M40 100H100M330 50V110M340 50V110M350 50V110M360 50V110M370 50V110M320 60H380M320 70H380M320 80H380M320 90H380M320 100H380" stroke="#67e8f9" stroke-opacity=".22"/>
+            <g fill="#67e8f9"><circle cx="55" cy="55" r="2.6"/><circle cx="85" cy="65" r="2.6"/><circle cx="45" cy="75" r="2.6"/><circle cx="85" cy="75" r="2.6"/><circle cx="75" cy="85" r="2.6"/><circle cx="95" cy="95" r="2.6"/><circle cx="65" cy="105" r="2.6"/><circle cx="335" cy="55" r="2.6"/><circle cx="365" cy="65" r="2.6"/><circle cx="325" cy="75" r="2.6"/><circle cx="365" cy="75" r="2.6"/><circle cx="355" cy="85" r="2.6"/><circle cx="375" cy="95" r="2.6"/><circle cx="345" cy="105" r="2.6"/></g>
+            <path class="ctl" d="M227.6 55.7L238.5 89.3L210 110L181.5 89.3L192.4 55.7Z"/>
+            <path class="wire" d="M210 80L227.6 55.7M210 80L238.5 89.3M210 80L210 110M210 80L181.5 89.3M210 80L192.4 55.7"/>
+            <g class="box"><circle cx="227.6" cy="55.7" r="5"/><circle cx="238.5" cy="89.3" r="5"/><circle cx="210" cy="110" r="5"/><circle cx="181.5" cy="89.3" r="5"/><circle cx="192.4" cy="55.7" r="5"/></g>
+            <circle class="ping" cx="210" cy="80" r="9" fill="none" stroke="#f0abfc"/>
+            <circle cx="210" cy="80" r="9" fill="#2a0f3a" stroke="#f0abfc" stroke-width="1.4"/>
+            <text class="t" x="210" y="83.5" style="fill:#f5d0fe">?</text>
+            <g class="wire flow" marker-end="url(#ah)"><path d="M106 80H166"/><path d="M254 80H318"/><path d="M350 114V150"/><path d="M300 167H260"/><path d="M160 167H120"/></g>
+            <text class="note" x="136" y="93" text-anchor="middle">KNN fill</text>
+            <g class="box"><rect x="300" y="150" width="100" height="34" rx="3"/><rect x="160" y="150" width="100" height="34" rx="3"/><rect x="20" y="150" width="100" height="34" rx="3"/></g>
+            <text class="t" x="350" y="164">SVD</text><text class="s" x="350" y="176">k = 25 factors</text>
+            <text class="t" x="210" y="164">× NCF</text><text class="s" x="210" y="176">weights each guess</text>
+            <text class="t" x="70" y="164">PREDICTIONS</text><text class="s" x="70" y="176" style="fill:#fbbf24">★★★★☆</text>
+            <g class="co"><path d="M70 110V118"/><circle cx="70" cy="110" r="2.2"/><path d="M70 184V192"/><circle cx="70" cy="184" r="2.2"/><path d="M210 184V192"/><circle cx="210" cy="184" r="2.2"/></g>
+            <text class="ct" x="70" y="128" text-anchor="middle">~95% MISSING</text>
+            <text class="ct" x="70" y="202" text-anchor="middle">RMSE 0.89</text><text class="cs" x="70" y="213" text-anchor="middle">held-out ratings</text>
+            <text class="ct" x="210" y="202" text-anchor="middle">21% LOWER ERROR</text><text class="cs" x="210" y="213" text-anchor="middle">than NCF alone (1.13)</text>
+            <g class="dim"><path d="M10 232H410M10 227V237M410 227V237"/><text x="210" y="226">6,040 USERS · ~3,900 MOVIES · 1M RATINGS</text></g>
+          </svg>
+        </figure>
+        <div class="row-lit">
+          <p class="lit-title">Movie Recommender System</p>
+          <p class="lit-hint">Each pink callout marks where a result comes from.</p>
+          <button type="button" class="back">← Back to details</button>
+        </div>
+        <div class="row-body">
+          <div class="row-head"><h3>Movie Recommender System</h3><div class="row-side"><span class="row-when">May 2023</span><button type="button" class="arch-btn" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-arch"/></svg>View architecture</button></div></div>
+          <p class="hook">About 95% of user–movie ratings are missing. This model fills the gaps.</p>
+          <ul>
+            <li>Filled missing ratings for cold-start users and movies by linking films in a genre knowledge graph and estimating each gap from the most similar movies.</li>
+            <li>Reached an RMSE of 0.89 on held-out MovieLens 1M ratings, 21% below a neural model alone (1.13), by factorising the filled matrix with SVD (k=25) and weighting each prediction with neural collaborative filtering.</li>
+          </ul>
+          <div class="mini-stats">
+            <div><b class="grad">0.89</b><span>RMSE on held-out MovieLens 1M ratings</span></div>
+            <div><b class="grad" data-count="21" data-suffix="%">21%</b><span>lower error than the neural model alone (RMSE 1.13)</span></div>
+          </div>
+          <div class="chips"><span>Python</span><span>TensorFlow</span><span>Knowledge graph</span><span>SVD</span><span>Neural CF</span></div>
+          <a class="more" href="https://github.com/ronitmehta/Movie-Recommender-System" target="_blank" rel="noreferrer noopener">View on GitHub <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+      <article class="row flip">
+        <figure class="arch raft" data-state="ok" aria-hidden="true">
+          <svg viewBox="0 0 420 240">
+            <text class="fig" x="12" y="18">FIG. 4 · RAFT · 5-NODE CLUSTER · GCP</text>
+            <path class="e-old wire flow" d="M210 124L92 72M210 124L328 72M210 124L112 194M210 124L308 194"/>
+            <g class="e-new"><path class="wire flow" d="M328 72L92 72M328 72L112 194M328 72L308 194"/><path class="ctl" d="M328 72L210 124"/></g>
+            <g class="cand" fill="none" stroke="#fbbf24" stroke-dasharray="3 3"><circle cx="92" cy="72" r="23"/><circle cx="328" cy="72" r="23"/><circle cx="112" cy="194" r="23"/><circle cx="308" cy="194" r="23"/></g>
+            <g class="lease"><circle class="turn" cx="210" cy="124" r="40" fill="none" stroke="#67e8f9" stroke-opacity=".55" stroke-dasharray="3 5"/><circle class="ping" cx="210" cy="124" r="26" fill="none" stroke="#a5f3fc"/></g>
+            <g class="n0"><circle class="box hub" cx="210" cy="124" r="26"/></g>
+            <g class="box"><circle cx="92" cy="72" r="17"/><circle cx="112" cy="194" r="17"/><circle cx="308" cy="194" r="17"/></g>
+            <g class="n2"><circle class="box" cx="328" cy="72" r="17"/></g>
+            <g class="lbl-ok"><text class="t" x="210" y="123" style="font-size:9.5px">LEADER</text><text class="s" x="210" y="135">lease</text></g>
+            <g class="lbl-down"><text class="t" x="210" y="126" style="font-size:13px;fill:#f87171">✕</text><text class="s" x="210" y="139" style="fill:#fca5a5">down</text></g>
+            <g class="t" style="font-size:9px"><text x="92" y="75">F1</text><text x="112" y="197">F3</text><text x="308" y="197">F4</text></g>
+            <text class="t lbl-f2" x="328" y="75" style="font-size:9px">F2</text>
+            <text class="t lbl-new" x="328" y="74.5" style="font-size:7px">LEADER</text>
+            <g class="co co-lease"><path d="M248.6 134.4L258 140H272"/><circle cx="248.6" cy="134.4" r="2.2"/></g>
+            <g class="co-lease"><text class="ct" x="276" y="143">p99 READS ↓ ~80%</text><text class="cs" x="276" y="154">local reads under lease</text></g>
+            <g class="co"><path d="M80 84L66 104"/><circle cx="80" cy="84" r="2.2"/><path d="M129 194H140"/><circle cx="129" cy="194" r="2.2"/></g>
+            <text class="ct" x="10" y="116">0 LOG DIVERGENCE</text><text class="cs" x="10" y="127">crashes, isolation,</text><text class="cs" x="10" y="137">total quorum loss</text>
+            <text class="ct" x="144" y="197">RECOVERY &lt; 500 ms</text><text class="cs" x="144" y="208">write-ahead log replay</text>
+            <g class="note" style="font-size:8px;text-anchor:end"><text class="ft-ok" x="410" y="232">term 7 · leader holds lease</text><text class="ft-crash" x="410" y="232" style="fill:#fcd34d">election in progress…</text><text class="ft-new" x="410" y="232" style="fill:#a5f3fc">term 8 · logs still match</text></g>
+          </svg>
+        </figure>
+        <div class="row-lit">
+          <p class="lit-title">Raft for Faster Reads</p>
+          <div class="try">
+            <button type="button" data-act="crash">Crash the leader</button>
+            <button type="button" class="ghost" data-act="reset">Restore</button>
+            <p class="try-status" aria-live="polite">Try it: crash the leader and watch the cluster recover.</p>
+          </div>
+          <button type="button" class="back">← Back to details</button>
+        </div>
+        <div class="row-body">
+          <div class="row-head"><h3>Raft for Faster Reads</h3><div class="row-side"><span class="row-when">Jan – Feb 2024</span><button type="button" class="arch-btn" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-arch"/></svg>Break it yourself</button></div></div>
+          <p class="hook">Crash the leader. Cut off the majority. Lose the whole quorum. The log still never diverges.</p>
+          <ul>
+            <li>Cut p99 read latency by about 80% by serving linearizable reads locally under heartbeat-renewed leader leases.</li>
+            <li>Recovered crashed nodes in under 500 ms without split-brain reads by restoring from persisted write-ahead logs, propagating lease time and delaying new-leader commits.</li>
+            <li>Verified zero log divergence on a 5-node GCP cluster by injecting leader crashes, follower restarts, majority isolation and total quorum loss.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>Multithreading</span><span>gRPC</span><span>Locks</span><span>Distributed systems</span></div>
+        </div>
+      </article>
+      <article class="row">
+        <figure class="arch mr" data-state="ok" aria-hidden="true">
+          <svg viewBox="0 0 420 240">
+            <text class="fig" x="12" y="18">FIG. 5 · MAPREDUCE · K-MEANS</text>
+            <path class="ctl" d="M210 64L72 100M210 64L164 100M210 64L256 100M210 64L348 100"/>
+            <path class="wire flow" d="M72 126L150 170M72 126L270 170M164 126L150 170M164 126L270 170M348 126L150 170M348 126L270 170"/>
+            <path class="m3-flows wire flow" d="M256 126L150 170M256 126L270 170"/>
+            <g class="moved"><path d="M240 100C236 76 192 76 188 96" fill="none" stroke="#fbbf24" stroke-width="1.4" stroke-dasharray="3 3" marker-end="url(#ah-amber)"/><text class="note" x="214" y="77" text-anchor="middle" style="fill:#fcd34d">moved</text></g>
+            <g class="box">
+              <rect x="170" y="30" width="80" height="34" rx="3"/>
+              <rect x="40" y="100" width="64" height="26" rx="3"/><g class="m2"><rect x="132" y="100" width="64" height="26" rx="3"/></g><g class="m3"><rect x="224" y="100" width="64" height="26" rx="3"/></g><rect x="316" y="100" width="64" height="26" rx="3"/>
+              <rect x="108" y="170" width="84" height="26" rx="3"/><rect x="228" y="170" width="84" height="26" rx="3"/>
+            </g>
+            <text class="t" x="210" y="45">MASTER</text><text class="s" x="210" y="57">gRPC control</text>
+            <g class="t"><text x="72" y="117">MAP 1</text><text x="164" y="117">MAP 2</text><text x="256" y="117">MAP 3</text><text x="348" y="117">MAP 4</text><text x="150" y="187">REDUCE 1</text><text x="270" y="187">REDUCE 2</text></g>
+            <text class="m3-dead note" x="256" y="138" text-anchor="middle" style="fill:#fca5a5">✕ killed</text>
+            <g class="co"><path d="M52 126V143"/><circle cx="52" cy="126" r="2.2"/><path d="M309 148H330"/><circle cx="309" cy="148" r="2.2"/></g>
+            <text class="ct" x="10" y="153">50% TASKS FAIL</text><text class="cs" x="10" y="164">job still finishes</text><text class="cs" x="10" y="174">deadlines · reassign</text>
+            <text class="ct" x="334" y="152">M × R PULLS</text><text class="cs" x="334" y="163">master stays off</text><text class="cs" x="334" y="173">the data path</text>
+            <g class="note" style="font-size:8px;text-anchor:middle"><text class="ft-ok" x="210" y="226">10,000+ vectors · 4 mappers × 2 reducers · 5 clusters</text><text class="ft-killed" x="210" y="226" style="fill:#fcd34d">Map 3 down · task reassigned…</text><text class="ft-done" x="210" y="226" style="fill:#a5f3fc">✓ job finished, every output written once</text></g>
+          </svg>
+        </figure>
+        <div class="row-lit">
+          <p class="lit-title">MapReduce Framework</p>
+          <div class="try">
+            <button type="button" data-act="kill">Kill a mapper</button>
+            <button type="button" class="ghost" data-act="reset">Restore</button>
+            <p class="try-status" aria-live="polite">Try it: kill a mapper in the middle of the job.</p>
+          </div>
+          <button type="button" class="back">← Back to details</button>
+        </div>
+        <div class="row-body">
+          <div class="row-head"><h3>MapReduce Framework</h3><div class="row-side"><span class="row-when">Mar – May 2024</span><button type="button" class="arch-btn" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-arch"/></svg>Break it yourself</button></div></div>
+          <p class="hook">Half the tasks failed on purpose. The job still finished.</p>
+          <ul>
+            <li>Kept K-Means jobs completing with 50% of tasks failing by adding gRPC deadlines, task reassignment and task-ID-based output paths that make retries safe.</li>
+            <li>Took the Master off the data path by having Reducers pull partitions straight from Mapper gRPC endpoints over M × R parallel connections.</li>
+            <li>Converged 10,000+ vectors to a 0.0001 tolerance across 4 Mappers, 2 Reducers and 5 clusters by driving iterative K-Means through a gRPC control plane.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>gRPC</span><span>Protocol Buffers</span><span>Multiprocessing</span><span>TCP/IP</span></div>
+        </div>
+      </article>
+      <article class="row flip">
+        <figure class="arch" aria-hidden="true">
+          <svg viewBox="0 0 420 240">
+            <text class="fig" x="12" y="18">FIG. 6 · STUDY DESIGN</text>
+            <g class="box">
+              <rect x="10" y="44" width="120" height="36" rx="3"/><rect x="150" y="44" width="120" height="36" rx="3"/><rect x="290" y="44" width="120" height="36" rx="3"/>
+              <rect x="10" y="128" width="120" height="36" rx="3"/><rect x="150" y="128" width="120" height="36" rx="3"/><rect x="290" y="128" width="120" height="36" rx="3"/>
+            </g>
+            <g class="wire flow" marker-end="url(#ah)"><path d="M130 62H150"/><path d="M270 62H290"/><path d="M350 80V128"/><path d="M290 146H270"/><path d="M150 146H130"/></g>
+            <text class="t" x="70" y="59">411 STUDENTS</text><text class="s" x="70" y="71">151 groups</text>
+            <text class="t" x="210" y="59">3 ASSIGNMENTS</text><text class="s" x="210" y="71">gRPC · Raft · MapReduce</text>
+            <text class="t" x="350" y="59">SURVEY + CHATS</text><text class="s" x="350" y="71">after each assignment</text>
+            <text class="t" x="350" y="143">ANALYSIS</text><text class="s" x="350" y="155">stats + thematic coding</text>
+            <text class="t" x="210" y="143">FINDINGS</text><text class="s" x="210" y="155">usage · prompting</text>
+            <text class="t" x="70" y="143">ACE 2025</text><text class="s" x="70" y="155">peer-reviewed paper</text>
+            <g class="co"><path d="M350 164V172"/><circle cx="350" cy="164" r="2.2"/><path d="M210 164V172"/><circle cx="210" cy="164" r="2.2"/></g>
+            <text class="ct" x="350" y="182" text-anchor="middle">2,317 PROMPTS CODED</text><text class="cs" x="350" y="193" text-anchor="middle">κ = 0.768 agreement</text>
+            <text class="ct" x="210" y="182" text-anchor="middle">97–99% USED LLMs</text><text class="cs" x="210" y="193" text-anchor="middle">only ~14% let them</text><text class="cs" x="210" y="203" text-anchor="middle">write &gt;60% of code</text>
+          </svg>
+        </figure>
+        <div class="row-lit">
+          <p class="lit-title">Analyzing LLM Usage in an Advanced Computing Class in India</p>
+          <p class="lit-hint">Each pink callout marks where a result comes from.</p>
+          <button type="button" class="back">← Back to details</button>
+        </div>
+        <div class="row-body">
+          <div class="row-head"><h3>Analyzing LLM Usage in an Advanced Computing Class in India</h3><div class="row-side"><span class="row-when">Research · ACE 2025</span><button type="button" class="arch-btn" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-arch"/></svg>View study design</button></div></div>
+          <p class="hook">411 students and a lot of ChatGPT.</p>
+          <ul>
+            <li>Showed that almost every student used LLMs but few let them write most of their code, by co-authoring an analysis of 411 Distributed Systems students across three programming assignments.</li>
+            <li>Published the study at ACE 2025, the Australasian Computing Education Conference.</li>
+          </ul>
+          <div class="chips"><span>Research</span><span>LLMs</span><span>Computing education</span></div>
+          <a class="more" href="https://doi.org/10.1145/3716640.3716657" target="_blank" rel="noreferrer noopener">Read the paper <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="awards" id="achievements">
+    <h2 class="title grad">Education &amp; achievements</h2>
+    <div class="award-grid">
+      <div class="award" data-anim="left"><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg><h3>B.Tech in Computer Science</h3><p>IIIT-Delhi, India · Jan 2021 – Jun 2024</p></div>
+      <div class="award" data-anim="left" style="--d:.15s"><svg class="icon" aria-hidden="true"><use href="#i-trophy"/></svg><h3>Ranked 148th in Google Kick Start</h3><p>2022, Round H</p></div>
+      <div class="award" data-anim="right" style="--d:.15s"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg><h3>Oracle OCI Generative AI Professional</h3><p>Certification · 2024</p></div>
+      <div class="award" data-anim="right"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><h3>Completed Amazon ML Summer School</h3><p>2022</p></div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <h2 class="title grad" data-anim="top">Want to talk distributed systems?</h2>
+    <a class="btn" href="mailto:ronitmehta817@gmail.com" data-anim="top" style="--d:.15s">Say hello</a>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-cols">
+    <div class="foot-col">
+      <h3>Connect</h3>
+      <a href="https://github.com/ronitmehta" target="_blank" rel="noreferrer noopener"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>github.com/ronitmehta</a>
+      <a href="mailto:ronitmehta817@gmail.com"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>ronitmehta817@gmail.com</a>
+    </div>
+    <div class="foot-col">
+      <h3>Explore</h3>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+    </div>
+    <div class="foot-col">
+      <h3>About</h3>
+      <a href="#about-me">About me</a>
+      <a href="#achievements">Education</a>
+      <a href="https://doi.org/10.1145/3716640.3716657" target="_blank" rel="noreferrer noopener">Research paper</a>
+    </div>
+  </div>
+  <p class="copy">&copy; <span id="year">2026</span> Ronit Mehta. All rights reserved.</p>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const TAU = Math.PI * 2;
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile menu
+  const burger = document.querySelector('.burger');
+  const drawer = document.getElementById('drawer');
+  const setMenu = (open) => { drawer.classList.toggle('open', open); burger.setAttribute('aria-expanded', String(open)); };
+  burger.addEventListener('click', () => setMenu(!drawer.classList.contains('open')));
+  drawer.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+
+  // Skill logos, grouped as on the résumé
+  const D = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/';
+  const S = 'https://cdn.simpleicons.org/';
+  // The icon CDNs have no AWS service logos, so draw them in the style of the AWS architecture icons.
+  const aws = (from, to, glyph) => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/></linearGradient></defs><rect width="64" height="64" rx="12" fill="url(#g)"/><g fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${glyph}</g></svg>`);
+  const SRC = {
+    'Java': D + 'java/java-original.svg', 'Python': D + 'python/python-original.svg', 'Linux': S + 'linux/white', 'Git': D + 'git/git-original.svg', 'Cursor': S + 'cursor/white',
+    'Spring': D + 'spring/spring-original.svg', 'Spring Boot': S + 'springboot', 'gRPC': D + 'grpc/grpc-original.svg', 'GraphQL': D + 'graphql/graphql-plain.svg', 'OpenAPI': S + 'openapiinitiative',
+    'AWS': D + 'amazonwebservices/amazonwebservices-plain-wordmark.svg',
+    'AWS Lambda': aws('#c8511b', '#ff9900', '<path d="M20 50L36.6 30.2M23 14h6l17 36h4"/>'),
+    'Amazon S3': aws('#1b660f', '#6cae3e', '<ellipse cx="32" cy="20" rx="17" ry="6"/><path d="M15 20l4.5 26c1 3.5 6.5 6 12.5 6s11.5-2.5 12.5-6L49 20"/>'),
+    'Amazon SQS': aws('#b0084d', '#ff4f8b', '<rect x="19" y="22" width="26" height="20" rx="3"/><path d="M19 25l13 9 13-9M7 32h7M50 32h7M53 28l4 4-4 4"/>'),
+    'Google Cloud': D + 'googlecloud/googlecloud-original.svg', 'Docker': D + 'docker/docker-original.svg', 'Kubernetes': D + 'kubernetes/kubernetes-original.svg', 'Terraform': D + 'terraform/terraform-original.svg',
+    'Apache Kafka': S + 'apachekafka/white', 'PostgreSQL': D + 'postgresql/postgresql-original.svg', 'Flyway': S + 'flyway', 'JUnit': D + 'junit/junit-original.svg',
+    'Prometheus': D + 'prometheus/prometheus-original.svg', 'Grafana': D + 'grafana/grafana-original.svg',
+  };
+  const GROUPS = [
+    ['Languages &amp; tools', [['Java', 64], ['Python', 56], ['Linux', 50], ['Git', 52], ['Cursor', 46]]],
+    ['Backend &amp; APIs', [['Spring', 56], ['Spring Boot', 52], ['gRPC', 64], ['GraphQL', 52], ['OpenAPI', 52]]],
+    ['Cloud &amp; DevOps', [['AWS', 64], ['AWS Lambda', 48], ['Amazon S3', 48], ['Amazon SQS', 48], ['Google Cloud', 56], ['Docker', 60], ['Kubernetes', 56], ['Terraform', 52]]],
+    ['Data, testing &amp; observability', [['Apache Kafka', 50], ['PostgreSQL', 56], ['Flyway', 50], ['JUnit', 52], ['Prometheus', 52], ['Grafana', 52]]],
+  ];
+  document.getElementById('skill-rows').innerHTML = GROUPS.map(([label, row]) => `<div class="skill-group"><p class="skill-label">${label}</p><div class="skill-row">${row.map(([name, px], i) =>
+    `<img class="skill" src="${SRC[name]}" alt="${name}" title="${name}" width="${px}" height="${px}" loading="lazy" decoding="async" style="transition-delay:${(i * 0.1).toFixed(1)}s">`).join('')}</div></div>`).join('');
+
+  // Playable diagrams: each step is [state, status message], shown in order after a button press
+  const playable = (shot, idle, steps) => {
+    const tryRow = shot.parentElement.querySelector('.try');
+    const status = tryRow.querySelector('.try-status');
+    let timer = 0;
+    tryRow.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      clearTimeout(timer);
+      if (b.dataset.act === 'reset') { shot.dataset.state = 'ok'; status.innerHTML = idle; return; }
+      const [[first, firstMsg], [then, thenMsg]] = steps;
+      shot.dataset.state = first;
+      status.innerHTML = firstMsg;
+      timer = setTimeout(() => { shot.dataset.state = then; status.innerHTML = thenMsg; }, reduce ? 0 : 1300);
+    });
+  };
+  playable(document.querySelector('.arch.raft'), 'Try it: crash the leader and watch the cluster recover.', [
+    ['crashed', '<b>Leader crashed.</b> Its lease runs out and the followers start an election…'],
+    ['elected', '<b>F2 won the election in term 8.</b> No acknowledged write was lost, and the logs still match.'],
+  ]);
+  playable(document.querySelector('.arch.mr'), 'Try it: kill a mapper in the middle of the job.', [
+    ['killed', '<b>Map 3 was killed.</b> Its gRPC deadline passes, so the Master hands the task to Map 2…'],
+    ['done', '<b>Job finished.</b> Task-ID output paths make the retry safe, so nothing is written twice.'],
+  ]);
+
+  // "View architecture" fades a row's text and brings its blueprint forward; "Back to details" or Escape returns
+  document.querySelectorAll('.row').forEach((row) => {
+    const open = row.querySelector('.arch-btn'), back = row.querySelector('.back');
+    const set = (on) => {
+      row.classList.toggle('lit', on);
+      open.setAttribute('aria-expanded', String(on));
+      if (!on) row.querySelector('[data-act="reset"]')?.click();
+      (on ? back : open).focus({ preventScroll: true });
+    };
+    open.addEventListener('click', () => set(true));
+    back.addEventListener('click', () => set(false));
+    row.addEventListener('keydown', (e) => { if (e.key === 'Escape' && row.classList.contains('lit')) set(false); });
+  });
+
+  // Headline numbers count up the first time they scroll into view
+  const counters = document.querySelectorAll('[data-count], [data-range]');
+  if (!reduce && counters.length) {
+    const countUp = (el) => {
+      const suffix = el.dataset.suffix || '', t0 = performance.now();
+      const range = el.dataset.range && el.dataset.range.split(',').map(Number);
+      const from = Number(el.dataset.from || 0), to = Number(el.dataset.count || 0);
+      const step = (now) => {
+        const t = Math.min(1, (now - t0) / 1300), k = 1 - (1 - t) ** 3;
+        el.textContent = range ? `${Math.round(range[0] * k)}–${Math.round(range[1] * k)}${suffix}` : `${Math.round(from + (to - from) * k)}${suffix}`;
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    const countIn = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { countUp(e.target); countIn.unobserve(e.target); } }), { threshold: 0.6 });
+    counters.forEach((c) => countIn.observe(c));
+  }
+
+
+  // Reveal on scroll: entrance animations and skill logos run once, when they come into view
+  const reveal = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      e.target.classList.add('go', 'in');
+      reveal.unobserve(e.target);
+    }
+  }, { threshold: 0.15 });
+  document.querySelectorAll('[data-anim], .skill').forEach((el) => reveal.observe(el));
+
+  // Canvas helpers: crisp on high-DPI screens; animation pauses while a canvas is off screen
+  function surface(canvas) {
+    const ctx = canvas.getContext('2d');
+    const s = { ctx, w: 0, h: 0 };
+    s.resize = () => {
+      const r = canvas.getBoundingClientRect();
+      s.w = r.width; s.h = r.height;
+      canvas.width = Math.max(1, Math.round(r.width * DPR));
+      canvas.height = Math.max(1, Math.round(r.height * DPR));
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    };
+    s.resize();
+    return s;
+  }
+  function animate(el, draw) {
+    if (reduce) { draw(0); return; }
+    let visible = true, raf = 0, last = 0;
+    const tick = (now) => {
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      draw(dt);
+      raf = visible ? requestAnimationFrame(tick) : 0;
+    };
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !raf) { last = 0; raf = requestAnimationFrame(tick); }
+    }).observe(el);
+  }
+
+  // Stars: points spread through a sphere around the camera, slowly turning
+  const starsEl = document.getElementById('stars');
+  const stars = surface(starsEl);
+  const COUNT = 1666;
+  const P = new Float32Array(COUNT * 3);
+  for (let i = 0; i < COUNT; i++) {
+    let x, y, z, d;
+    do { x = Math.random() * 2 - 1; y = Math.random() * 2 - 1; z = Math.random() * 2 - 1; d = x * x + y * y + z * z; } while (d > 1 || d < 1e-4);
+    const k = (1.2 * Math.cbrt(Math.random())) / Math.sqrt(d);
+    P[i * 3] = x * k; P[i * 3 + 1] = y * k; P[i * 3 + 2] = z * k;
+  }
+  let rotX = 0, rotY = 0;
+  const drawStars = (dt) => {
+    rotX -= dt / 10; rotY -= dt / 15;
+    const { ctx, w, h } = stars;
+    ctx.clearRect(0, 0, w, h);
+    const focal = h / 2 / Math.tan((37.5 * Math.PI) / 180);
+    const base = 0.001 * h;
+    const cX = Math.cos(rotX), sX = Math.sin(rotX), cY = Math.cos(rotY), sY = Math.sin(rotY), q = Math.SQRT1_2;
+    ctx.fillStyle = '#fff';
+    for (let i = 0; i < COUNT; i++) {
+      const x = P[i * 3], y = P[i * 3 + 1], z = P[i * 3 + 2];
+      const x1 = x * cY + z * sY, z1 = z * cY - x * sY;
+      const y2 = y * cX - z1 * sX, z2 = y * sX + z1 * cX;
+      const x3 = (x1 - y2) * q, y3 = (x1 + y2) * q;
+      const depth = 1 - z2;
+      if (depth < 0.05) continue;
+      const px = w / 2 + (x3 * focal) / depth, py = h / 2 - (y3 * focal) / depth;
+      if (px < -3 || py < -3 || px > w + 3 || py > h + 3) continue;
+      const size = Math.min(2.4, Math.max(1, base / depth));
+      ctx.globalAlpha = Math.min(1, 0.25 + 0.35 / depth);
+      ctx.fillRect(px - size / 2, py - size / 2, size, size);
+    }
+    ctx.globalAlpha = 1;
+  };
+  animate(starsEl, drawStars);
+
+  // Black hole: a flattened, glowing accretion disk around a dark shadow just under the navbar
+  const holeEl = document.getElementById('hole');
+  const hole = surface(holeEl);
+  const DISK = Array.from({ length: 900 }, () => {
+    const u = Math.pow(Math.random(), 1.7);
+    return { u, a: Math.random() * TAU, speed: 0.6 + Math.random() * 0.8, trail: 0.06 + Math.random() * 0.16, band: Math.min(3, Math.floor(u * 4)) };
+  });
+  const BANDS = [['rgba(255,248,255,.7)', 1.6], ['rgba(228,210,255,.5)', 1.4], ['rgba(180,140,255,.36)', 1.2], ['rgba(125,85,245,.26)', 1]];
+  const TILT = 0.26;
+  const drawHole = (dt) => {
+    const { ctx, w, h } = hole;
+    const R = Math.max(42, Math.min(76, w * 0.05)), cx = w / 2, cy = 64;
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'lighter';
+    let g = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, Math.max(560, w * 0.42));
+    g.addColorStop(0, 'rgba(160,110,255,.55)'); g.addColorStop(0.18, 'rgba(120,70,240,.3)'); g.addColorStop(0.45, 'rgba(80,40,190,.12)'); g.addColorStop(1, 'rgba(40,10,120,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(1, TILT);
+    g = ctx.createRadialGradient(0, 0, R, 0, 0, R * 5.2);
+    g.addColorStop(0, 'rgba(255,240,255,.75)'); g.addColorStop(0.25, 'rgba(200,170,255,.42)'); g.addColorStop(0.6, 'rgba(130,80,250,.16)'); g.addColorStop(1, 'rgba(90,40,200,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, R * 5.2, 0, TAU); ctx.fill();
+    ctx.restore();
+    for (const p of DISK) p.a += dt * p.speed * 1.2 * Math.pow(1.35 / (1.35 + p.u * 3.9), 1.5);
+    // Disk streaks, then the shadow over them, then the lensed ring of light around the shadow.
+    ctx.lineCap = 'round';
+    BANDS.forEach(([color, width], band) => {
+      ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+      for (const p of DISK) {
+        if (p.band !== band) continue;
+        const r = R * (1.35 + p.u * 3.9), a0 = p.a - p.trail;
+        ctx.moveTo(cx + Math.cos(a0) * r, cy + Math.sin(a0) * r * TILT);
+        ctx.ellipse(cx, cy, r, r * TILT, 0, a0, p.a);
+      }
+      ctx.stroke();
+    });
+    ctx.globalCompositeOperation = 'source-over';
+    g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+    g.addColorStop(0, '#000'); g.addColorStop(0.92, '#05010f'); g.addColorStop(1, 'rgba(20,6,50,.9)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.fill();
+    ctx.globalCompositeOperation = 'lighter';
+    // Centred a little low, so the ring is thickest under the shadow, as lensing makes it look.
+    const ringY = cy + R * 0.14;
+    g = ctx.createRadialGradient(cx, ringY, R * 0.86, cx, ringY, R * 2.3);
+    g.addColorStop(0, 'rgba(255,250,255,.95)'); g.addColorStop(0.08, 'rgba(240,225,255,.72)'); g.addColorStop(0.3, 'rgba(190,150,255,.3)'); g.addColorStop(1, 'rgba(120,70,240,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(cx, ringY, R * 2.3, 0, TAU); ctx.arc(cx, cy, R * 0.98, 0, TAU, true); ctx.fill();
+    ctx.shadowColor = 'rgba(200,170,255,.9)'; ctx.shadowBlur = 22;
+    ctx.strokeStyle = 'rgba(255,248,255,.85)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx, cy, R * 1.02, 0, TAU); ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.globalCompositeOperation = 'source-over';
+  };
+  animate(holeEl, drawHole);
+
+  let resizeTimer = 0;
+  addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      stars.resize(); hole.resize();
+      if (reduce) { drawStars(0); drawHole(0); }
+    }, 120);
+  });
+})();
+</script>
+</body>
+</html>
