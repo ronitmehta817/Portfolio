@@ -59,6 +59,7 @@ p { margin: 0; }
 .nav .logo { left: var(--m); top: calc(64.84 * var(--px)); font-size: calc(20 * var(--px)); font-weight: 700; transition: font-size .8s var(--ease), font-weight .8s var(--ease), top .8s var(--ease); }
 .nav.compact .logo { top: calc(69.25 * var(--px)); font-size: calc(15 * var(--px)); font-weight: 400; }
 .nav .l-exp { left: 36vw; }
+.nav .l-stk { left: 50.3vw; }
 .nav .l-pro { left: 61.94vw; }
 .nav .l-con { right: var(--m); }
 .nav .link::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(-3.5 * var(--px)); height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .6s var(--ease); }
@@ -212,6 +213,28 @@ p { margin: 0; }
 .dot::before { content: ""; position: absolute; inset: calc(-14 * var(--px)); }
 .dot.on { background: var(--aqua); box-shadow: inset 0 0 0 calc(1.5 * var(--px)) var(--aqua); }
 
+/* ---------- tech stack ---------- */
+.stack-title { position: absolute; left: calc(var(--m) - 6 * var(--px)); top: calc(50% + (190 - 600) * var(--px)); margin: 0; font-weight: 450; font-size: calc(104 * var(--px)); line-height: 1; letter-spacing: -.05em; color: var(--ink); white-space: nowrap; }
+.stack-title em { font-family: var(--serif); font-style: italic; font-weight: 440; font-stretch: 75%; font-size: 1.05em; letter-spacing: -.05em; color: var(--orange); }
+.stack-tag { position: absolute; left: var(--m); top: calc(50% + (322 - 600) * var(--px)); font-family: var(--serif); font-style: italic; font-weight: 400; font-stretch: 75%; font-size: calc(34 * var(--px)); line-height: 1.2; color: var(--aqua); white-space: nowrap; }
+.stack-groups { position: absolute; left: var(--m); right: var(--m); top: calc(50% + (418 - 600) * var(--px)); }
+.stack-row { display: flex; align-items: center; min-height: calc(104 * var(--px)); }
+.stack-row + .stack-row { margin-top: calc(8 * var(--px)); }
+.stack-label { flex: none; width: calc(250 * var(--px)); padding-right: calc(24 * var(--px)); font-size: calc(15 * var(--px)); line-height: calc(20 * var(--px)); text-transform: uppercase; color: var(--aqua); }
+.techs { display: flex; flex-wrap: wrap; gap: calc(14 * var(--px)) calc(26 * var(--px)); margin: 0; padding: 0; list-style: none; }
+/* Logos rise in one after another the first time the screen is reached */
+.tech { display: flex; flex-direction: column; align-items: center; width: calc(76 * var(--px)); opacity: 0; transform: translateY(calc(16 * var(--px))); transition: opacity .6s ease, transform .8s var(--ease); transition-delay: calc(var(--i, 0) * 40ms + 250ms); }
+.stack.seen .tech { opacity: 1; transform: none; }
+.tile { display: grid; place-items: center; width: calc(64 * var(--px)); height: calc(64 * var(--px)); border-radius: calc(18 * var(--px)); background: rgba(0, 0, 0, .42); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .13); transition: transform .35s var(--ease), box-shadow .35s ease, background-color .35s ease; }
+.tech:hover .tile { transform: translateY(calc(-4 * var(--px))) scale(1.06); background: rgba(0, 0, 0, .62); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .38); }
+.tile img { display: block; width: calc(40 * var(--s, 1) * var(--px)); height: calc(40 * var(--s, 1) * var(--px)); object-fit: contain; }
+.tech-name { margin-top: calc(8 * var(--px)); font-size: calc(11.5 * var(--px)); line-height: calc(14 * var(--px)); letter-spacing: .02em; text-transform: uppercase; white-space: nowrap; color: rgba(255, 255, 255, .74); }
+.stack-practices { position: absolute; left: var(--m); right: var(--m); top: calc(50% + (884 - 600) * var(--px)); display: flex; align-items: flex-start; }
+.stack-practices .stack-label { padding-top: calc(6 * var(--px)); }
+.chips { display: flex; flex-wrap: wrap; gap: calc(10 * var(--px)); margin: 0; padding: 0; list-style: none; }
+.chips li { padding: calc(7 * var(--px)) calc(14 * var(--px)); border-radius: 999px; background: rgba(0, 0, 0, .25); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); font-size: calc(12.5 * var(--px)); line-height: calc(16 * var(--px)); letter-spacing: .02em; text-transform: uppercase; color: rgba(255, 255, 255, .86); }
+.stack .cue { left: calc(var(--m) - 9 * var(--px)); bottom: calc(122 * var(--px)); height: calc(97 * var(--px)); }
+
 /* ---------- contacts ---------- */
 .contacts .headline { font-size: calc(170 * var(--px)); }
 .contacts .w1 { left: calc(var(--m) - 12.6 * var(--px)); top: calc(50% + (319.9 - 600) * var(--px)); }
@@ -256,7 +279,22 @@ p { margin: 0; }
   .arch-stage { display: none; }
   .screen-title { display: block; position: absolute; left: calc(var(--m) - .05em); top: 15vh; margin: 0; font-weight: 450; font-size: 14vw; line-height: 1; letter-spacing: -.057em; color: var(--ink); }
   .tags { top: calc(15vh + 18vw); font-size: 10.5px; line-height: 14px; }
-  .play .cue { display: none; }
+  .play .cue, .stack .cue { display: none; }
+  .stack-title { left: calc(var(--m) - .04em); top: 12vh; font-size: 8.8vw; }
+  .stack-tag { top: calc(12vh + 11vw); font-size: 4.4vw; }
+  .stack-groups { top: calc(12vh + 22vw); }
+  .stack-row { display: block; min-height: 0; }
+  .stack-row + .stack-row { margin-top: 12px; }
+  .stack-label { width: auto; padding: 0; margin-bottom: 6px; font-size: 10px; line-height: 13px; }
+  .techs { gap: 8px 6px; }
+  .tech { width: 50px; }
+  .tile { width: 38px; height: 38px; border-radius: 11px; }
+  .tile img { width: calc(24px * var(--s, 1)); height: calc(24px * var(--s, 1)); }
+  .tech-name { margin-top: 4px; font-size: 8px; line-height: 10px; }
+  .stack-practices { top: auto; bottom: 4vh; display: block; }
+  .stack-practices .stack-label { padding: 0; }
+  .chips { gap: 5px; }
+  .chips li { padding: 4px 8px; font-size: 8.5px; line-height: 11px; }
   .deck { left: var(--m); top: auto; bottom: 10vh; width: 87.2vw; height: 45vh; }
   .face { display: flex; flex-direction: column; gap: 12px; padding: 20px 18px; }
   .face .card-head, .face .card-row, .face .card-body { position: static; }
@@ -293,7 +331,8 @@ p { margin: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .grain, .flowing, .spin, .arch[data-state="crashed"] .cand, .card-btn, .card-btn::after { animation: none !important; }
-  .card, .card-inner, .arch-stage .arch, .nav .logo, .nav .link::after { transition-duration: .01s !important; }
+  .card, .card-inner, .arch-stage .arch, .tech, .tile, .nav .logo, .nav .link::after { transition-duration: .01s !important; }
+  .tech { transition-delay: 0s !important; }
 }
 </style>
 <noscript><style>
@@ -301,6 +340,7 @@ html, body { overflow: auto; height: auto; }
 .screens { position: static; opacity: 1 !important; }
 .screen { position: relative; height: 100vh; }
 .nav { opacity: 1 !important; }
+.tech { opacity: 1 !important; transform: none !important; }
 .no-js-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(45% 40% at 82% 28%, #1d3960 0%, transparent 70%), #010204; }
 </style><div class="no-js-bg"></div></noscript>
 </head>
@@ -328,8 +368,9 @@ html, body { overflow: auto; height: auto; }
 <header class="nav" id="nav">
   <a class="logo" href="#home" data-goto="0" data-ring="40">Ronit Mehta</a>
   <a class="link l-exp" href="#experience" data-goto="1" data-ring="40">Experience</a>
-  <a class="link l-pro" href="#projects" data-goto="2" data-ring="40">Projects</a>
-  <a class="link l-con" href="#contacts" data-goto="3" data-ring="40">Contacts</a>
+  <a class="link l-stk" href="#stack" data-goto="2" data-ring="40">Stack</a>
+  <a class="link l-pro" href="#projects" data-goto="3" data-ring="40">Projects</a>
+  <a class="link l-con" href="#contacts" data-goto="4" data-ring="40">Contacts</a>
 </header>
 
 <main class="screens">
@@ -427,8 +468,8 @@ html, body { overflow: auto; height: auto; }
         </svg>
       </figure>
     </div>
-    <p class="tags" data-speed=".96" data-lead=".5">Java 17 · Spring Boot · Kafka · PostgreSQL /<br>AWS · Docker · Kubernetes · Terraform</p>
-    <a class="cue" href="#projects" data-goto="2" data-ring="70" data-speed=".94" data-lead=".6" aria-label="Scroll to projects">
+    <p class="tags" data-speed=".96" data-lead=".5">National Australia Bank /<br>Aug 2024 — present</p>
+    <a class="cue" href="#stack" data-goto="2" data-ring="70" data-speed=".94" data-lead=".6" aria-label="Scroll to the tech stack">
       <svg viewBox="0 0 15 97" preserveAspectRatio="none" aria-hidden="true"><path d="M7.5 0V96M3.6 92.1 7.5 96l3.9-3.9" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
     </a>
 
@@ -514,6 +555,23 @@ html, body { overflow: auto; height: auto; }
       <button class="dot on" type="button" role="tab" aria-selected="true" aria-label="Invoice Processing Microservice" data-ring="24"></button>
       <button class="dot" type="button" role="tab" aria-selected="false" aria-label="Loyalty Program" data-ring="24"></button>
     </div>
+  </section>
+
+  <section class="screen stack" id="stack" aria-label="Tech stack">
+    <h2 class="stack-title" data-speed="1">What I <em>build</em> with</h2>
+    <p class="stack-tag" data-speed=".97" data-lead=".4">Never lose a record. Never process one twice.</p>
+    <div class="stack-groups" id="stack-groups" data-speed="1.04">
+      <noscript><p class="stack-label">Java 17 · Python · Spring Boot · gRPC · GraphQL · AWS · GCP · Docker · Kubernetes · Terraform · Kafka · PostgreSQL</p></noscript>
+    </div>
+    <div class="stack-practices" data-speed="1.07" data-lead=".3">
+      <p class="stack-label">Practices &amp; libraries</p>
+      <ul class="chips">
+        <li>Microservices</li><li>Distributed systems</li><li>Event-driven architecture</li><li>Domain-driven design</li><li>System design</li><li>REST APIs</li><li>Protocol Buffers</li><li>Spring Batch</li><li>OAuth 2.0</li><li>RBAC</li><li>Resilience4j</li><li>JaVers</li><li>Mockito</li><li>CI/CD</li><li>Infrastructure as Code</li><li>Concurrency</li><li>Fault tolerance</li><li>Idempotency</li><li>Observability</li><li>Generative AI</li><li>NLP</li>
+      </ul>
+    </div>
+    <a class="cue" href="#projects" data-goto="3" data-ring="70" data-speed=".94" data-lead=".6" aria-label="Scroll to projects">
+      <svg viewBox="0 0 15 97" preserveAspectRatio="none" aria-hidden="true"><path d="M7.5 0V96M3.6 92.1 7.5 96l3.9-3.9" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+    </a>
   </section>
 
   <section class="screen play" id="projects" aria-label="Projects and research">
@@ -656,7 +714,7 @@ html, body { overflow: auto; height: auto; }
       </figure>
     </div>
     <p class="tags" data-speed=".96" data-lead=".5">Python · gRPC · TensorFlow /<br>IIIT-Delhi · 2023 — 2024</p>
-    <a class="cue" href="#contacts" data-goto="3" data-ring="70" data-speed=".94" data-lead=".6" aria-label="Scroll to contacts">
+    <a class="cue" href="#contacts" data-goto="4" data-ring="70" data-speed=".94" data-lead=".6" aria-label="Scroll to contacts">
       <svg viewBox="0 0 15 97" preserveAspectRatio="none" aria-hidden="true"><path d="M7.5 0V96M3.6 92.1 7.5 96l3.9-3.9" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
     </a>
 
@@ -878,6 +936,37 @@ html, body { overflow: auto; height: auto; }
     $(".grain").style.backgroundImage = `url(${c.toDataURL()})`;
   }
 
+  /* ---------- tech stack: brand logos, grouped as on the résumé ---------- */
+  {
+    // jsDelivr's GitHub route refuses Devicon (over its 50 MB package limit), so use the npm package, pinned so file names can't change.
+    const D = "https://cdn.jsdelivr.net/npm/devicon@2.18.0/icons/";
+    const S = "https://cdn.simpleicons.org/";
+    // The icon libraries have no AWS service logos, so these are drawn in the style of the AWS architecture icons.
+    const aws = (from, to, glyph) => "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/></linearGradient></defs><rect width="64" height="64" rx="12" fill="url(#g)"/><g fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${glyph}</g></svg>`);
+    const SRC = {
+      "Java": D + "java/java-original.svg", "Python": D + "python/python-original.svg", "Linux": S + "linux/white", "Git": D + "git/git-original.svg", "Cursor": S + "cursor/white",
+      "Spring": D + "spring/spring-original.svg", "Spring Boot": S + "springboot", "gRPC": D + "grpc/grpc-original.svg", "GraphQL": D + "graphql/graphql-plain.svg", "OpenAPI": S + "openapiinitiative",
+      "AWS": D + "amazonwebservices/amazonwebservices-plain.svg",
+      "Lambda": aws("#c8511b", "#ff9900", '<path d="M20 50L36.6 30.2M23 14h6l17 36h4"/>'),
+      "S3": aws("#1b660f", "#6cae3e", '<ellipse cx="32" cy="20" rx="17" ry="6"/><path d="M15 20l4.5 26c1 3.5 6.5 6 12.5 6s11.5-2.5 12.5-6L49 20"/>'),
+      "SQS": aws("#b0084d", "#ff4f8b", '<rect x="19" y="22" width="26" height="20" rx="3"/><path d="M19 25l13 9 13-9M7 32h7M50 32h7M53 28l4 4-4 4"/>'),
+      "Google Cloud": D + "googlecloud/googlecloud-original.svg", "Docker": D + "docker/docker-original.svg", "Kubernetes": D + "kubernetes/kubernetes-original.svg", "Terraform": D + "terraform/terraform-original.svg",
+      "Kafka": S + "apachekafka/white", "PostgreSQL": D + "postgresql/postgresql-original.svg", "Flyway": S + "flyway", "JUnit": D + "junit/junit-original.svg",
+      "Prometheus": D + "prometheus/prometheus-original.svg", "Grafana": D + "grafana/grafana-original.svg",
+    };
+    const FULL = { "Lambda": "AWS Lambda", "S3": "Amazon S3", "SQS": "Amazon SQS", "Kafka": "Apache Kafka" };
+    // [name, optical size out of 64]: some marks look heavier than others at the same box size.
+    const GROUPS = [
+      ["Languages &amp; tools", [["Java", 64], ["Python", 56], ["Linux", 50], ["Git", 52], ["Cursor", 46]]],
+      ["Backend &amp; APIs", [["Spring", 56], ["Spring Boot", 52], ["gRPC", 64], ["GraphQL", 52], ["OpenAPI", 52]]],
+      ["Cloud &amp; DevOps", [["AWS", 64], ["Lambda", 48], ["S3", 48], ["SQS", 48], ["Google Cloud", 56], ["Docker", 60], ["Kubernetes", 56], ["Terraform", 52]]],
+      ["Data, testing &amp; observability", [["Kafka", 50], ["PostgreSQL", 56], ["Flyway", 50], ["JUnit", 52], ["Prometheus", 52], ["Grafana", 52]]],
+    ];
+    let n = 0;
+    $("#stack-groups").innerHTML = GROUPS.map(([label, items]) => `<div class="stack-row"><p class="stack-label">${label}</p><ul class="techs">${items.map(([name, size]) =>
+      `<li class="tech" style="--i:${n++}"><span class="tile" data-ring="40"${FULL[name] ? ` title="${FULL[name]}"` : ""}><img src="${SRC[name]}" alt="" width="40" height="40" decoding="async" style="--s:${(size / 64).toFixed(3)}"></span><span class="tech-name">${name}</span></li>`).join("")}</ul></div>`).join("");
+  }
+
   /* ---------- screens, parallax items, lens copies ---------- */
   const item = (el, twin) => ({ el, twin, speed: +el.dataset.speed, lead: +(el.dataset.lead || 0), drift: +(el.dataset.drift || 0) });
   const screens = $$(".screen").map((el, i) => {
@@ -943,6 +1032,7 @@ html, body { overflow: auto; height: auto; }
     if (i !== index) { const d = deckAt(i); if (d) jumpCard(d, entry === "last" ? d.cards.length - 1 : 0); }
     index = i;
     setActive(i);
+    screens[i].el.classList.add("seen");
     tween = { from: y, to: i * H, t0: performance.now() };
     readyAt = tween.t0 + SCREEN_GAP;
     history.replaceState(null, "", i ? "#" + screens[i].el.id : location.pathname + location.search);
@@ -1333,19 +1423,20 @@ html, body { overflow: auto; height: auto; }
       return col;
     }
 
-    // One palette per screen; the projects screen mirrors the experience one.
+    // One palette per screen: the stack screen mirrors the hero's, the projects screen mirrors the experience one.
     vec3 palette(float k, vec2 p, float a, float t) {
       if (k < 0.5) return hero(p, a, t);
       if (k < 1.5) return play(p, a, t);
-      if (k < 2.5) return play(vec2(a - p.x, p.y), a, t + 40.0);
+      if (k < 2.5) return hero(vec2(a - p.x, p.y), a, t + 20.0);
+      if (k < 3.5) return play(vec2(a - p.x, p.y), a, t + 40.0);
       return contact(p, a, t);
     }
 
     void main() {
       float a = res.x / res.y;
       vec2 p = vec2(uv.x * a, 1.0 - uv.y);
-      float s = clamp(scroll, 0.0, 3.0);
-      float k = min(floor(s), 2.0);
+      float s = clamp(scroll, 0.0, 4.0);
+      float k = min(floor(s), 3.0);
       float f = s - k;
       float e = 1.0 - f;
       float m = smoothstep(e - 0.55 * f, e + 0.55 * (1.0 - f), p.y);
@@ -1442,6 +1533,7 @@ html, body { overflow: auto; height: auto; }
   Promise.race([fontsReady, new Promise((r) => setTimeout(r, 2500))]).then(() => {
     doc.classList.remove("is-loading");
     doc.classList.add("bg-on");
+    screens[index].el.classList.add("seen");
     if (index === 0 && !reduce) { introT = performance.now(); intro = H * 0.62; layout(1 / 60); }
     else introDone = true;
   });
