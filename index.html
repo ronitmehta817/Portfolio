@@ -54,8 +54,9 @@ p { margin: 0; }
 }
 
 /* ---------- nav ---------- */
-.nav { position: fixed; inset: 0 0 auto 0; height: calc(120 * var(--px)); z-index: 20; font-size: calc(15 * var(--px)); line-height: 1; text-transform: uppercase; transition: opacity 1s ease .5s; }
-.nav a { position: absolute; top: calc(69.25 * var(--px)); white-space: nowrap; color: #fff; }
+/* The bar sits over the scroller, so only its links take the pointer; wheel and swipes on the rest reach the page. */
+.nav { position: fixed; inset: 0 0 auto 0; height: calc(120 * var(--px)); z-index: 20; font-size: calc(15 * var(--px)); line-height: 1; text-transform: uppercase; transition: opacity 1s ease .5s; pointer-events: none; }
+.nav a { position: absolute; top: calc(69.25 * var(--px)); white-space: nowrap; color: #fff; pointer-events: auto; }
 .nav .logo { left: var(--m); top: calc(64.84 * var(--px)); font-size: calc(20 * var(--px)); font-weight: 700; transition: font-size .8s var(--ease), font-weight .8s var(--ease), top .8s var(--ease); }
 .nav.compact .logo { top: calc(69.25 * var(--px)); font-size: calc(15 * var(--px)); font-weight: 400; }
 .nav .l-exp { left: 36vw; }
@@ -66,7 +67,13 @@ p { margin: 0; }
 .nav .link:hover::after, .nav .link.active::after { transform: scaleX(1); transform-origin: left; }
 
 /* ---------- screens ---------- */
-.screens { position: fixed; inset: 0; z-index: 1; transition: opacity .6s ease; }
+/* The page scrolls natively inside .scroller, over an empty track of snap points; the screens stay pinned on top. */
+.scroller { position: fixed; inset: 0; z-index: 1; overflow-x: hidden; overflow-y: auto; overflow-anchor: none; overscroll-behavior: none; scroll-snap-type: y mandatory; scrollbar-width: none; }
+.scroller::-webkit-scrollbar { display: none; }
+.scroll-track { position: relative; }
+.snap { position: absolute; left: 0; right: 0; pointer-events: none; scroll-snap-align: start; scroll-snap-stop: always; }
+/* Clipped so screens moved out of view don't lengthen the scroll. */
+.screens { position: sticky; top: 0; height: var(--H, 100vh); overflow: hidden; overflow: clip; transition: opacity .6s ease; }
 .screen { position: absolute; left: 0; top: 0; width: 100%; height: var(--H, 100vh); overflow: hidden; }
 .layer { position: absolute; inset: 0; }
 .lens-base [data-speed] { will-change: transform; }
@@ -172,7 +179,8 @@ p { margin: 0; }
 .face.back { transform: rotateY(180deg); }
 .face .mob { display: none; }
 
-.card-head { position: absolute; left: calc(85 * var(--cu)); top: calc(55 * var(--cu)); display: flex; align-items: baseline; white-space: nowrap; font-weight: 300; font-size: calc(51 * var(--cu)); line-height: 1; letter-spacing: -.05em; text-transform: uppercase; }
+/* Capitals need open tracking: tight spacing runs the words of a title together. */
+.card-head { position: absolute; left: calc(85 * var(--cu)); top: calc(55 * var(--cu)); display: flex; align-items: baseline; white-space: nowrap; font-weight: 300; font-size: calc(51 * var(--cu)); line-height: 1; letter-spacing: .03em; word-spacing: .14em; text-transform: uppercase; }
 .card-row { position: absolute; left: calc(85 * var(--cu)); top: calc(132 * var(--cu)); display: flex; align-items: center; gap: calc(26 * var(--cu)); }
 .card-btn { position: relative; flex: none; width: calc(77 * var(--cu)); height: calc(77 * var(--cu)); border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .85); display: grid; place-items: center; transition: background-color .4s ease; }
 .card-btn:hover { background: rgba(255, 255, 255, .1); }
@@ -234,18 +242,34 @@ p { margin: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: calc(10 * var(--px)); margin: 0; padding: 0; list-style: none; }
 .chips li { padding: calc(7 * var(--px)) calc(14 * var(--px)); border-radius: 999px; background: rgba(0, 0, 0, .25); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); font-size: calc(12.5 * var(--px)); line-height: calc(16 * var(--px)); letter-spacing: .02em; text-transform: uppercase; color: rgba(255, 255, 255, .86); }
 .stack .cue { left: calc(var(--m) - 9 * var(--px)); bottom: calc(122 * var(--px)); height: calc(97 * var(--px)); }
+.stack-segmented { display: none; }
 
 /* ---------- contacts ---------- */
 .contacts .headline { font-size: calc(170 * var(--px)); }
 .contacts .w1 { left: calc(var(--m) - 12.6 * var(--px)); top: calc(50% + (319.9 - 600) * var(--px)); }
 .contacts .w2 { right: calc(var(--m) + 8.5 * var(--px)); top: calc(50% + (399.1 - 600) * var(--px)); font-size: calc(119.3 * var(--px)); letter-spacing: -.0601em; }
 .contacts .w3 { right: calc(var(--m) + 8.8 * var(--px)); top: calc(50% + (489.9 - 600) * var(--px)); }
-.contacts .info { grid-template-columns: calc(36vw - var(--m)) 25.94vw auto; }
+.contacts .info { grid-template-columns: calc(36vw - var(--m)) auto; }
 .contacts .info a { position: relative; }
 .contacts .info a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease); }
 .contacts .info a:hover::after { transform: scaleX(1); transform-origin: left; }
 .contacts .cue { right: calc(var(--m) - 8.5 * var(--px)); bottom: calc(127 * var(--px)); height: calc(99 * var(--px)); }
 .contacts .cue svg { transform: rotate(180deg); }
+
+/* ---------- achievements: big results between the headline and the contact details ---------- */
+.achievements { position: absolute; left: var(--m); right: var(--m); top: calc(50% + (702 - 600) * var(--px)); }
+.achieve-label { display: flex; align-items: center; gap: calc(16 * var(--px)); font-size: calc(15 * var(--px)); line-height: calc(20 * var(--px)); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--orange); }
+.achieve-label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255, 168, 0, .6), rgba(255, 168, 0, 0)); }
+.achieve-list { display: grid; grid-template-columns: repeat(3, 1fr); margin: calc(20 * var(--px)) 0 0; padding: 0; list-style: none; }
+/* --a is the item's accent as r, g, b */
+.achieve { --a: 255, 168, 0; padding: calc(4 * var(--px)) calc(30 * var(--px)); border-left: 1px solid rgba(255, 255, 255, .18); opacity: 0; transform: translateY(calc(20 * var(--px))); transition: opacity .7s ease, transform .9s var(--ease); transition-delay: calc(var(--i, 0) * 120ms + 250ms); }
+.achieve:first-child { padding-left: 0; border-left: 0; }
+.achieve.cert { --a: 0, 255, 224; }
+.achieve.school { --a: 185, 164, 255; }
+.contacts.seen .achieve { opacity: 1; transform: none; }
+.achieve-result { display: block; font-family: var(--serif); font-style: italic; font-weight: 440; font-stretch: 75%; font-size: calc(60 * var(--px)); line-height: 1.05; letter-spacing: -.03em; white-space: nowrap; color: rgb(var(--a)); text-shadow: 0 0 calc(34 * var(--px)) rgba(var(--a), .5); }
+.achieve-name { margin-top: calc(12 * var(--px)); font-size: calc(17 * var(--px)); line-height: 1.2; font-weight: 600; letter-spacing: .07em; word-spacing: .08em; text-transform: uppercase; color: #fff; }
+.achieve-detail { margin-top: calc(6 * var(--px)); font-size: calc(15 * var(--px)); line-height: 1.4; color: rgba(255, 255, 255, .7); text-wrap: pretty; }
 
 /* ---------- cursor lens ---------- */
 .lens { position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none; opacity: 0; will-change: transform, opacity; }
@@ -280,67 +304,252 @@ p { margin: 0; }
   .screen-title { display: block; position: absolute; left: calc(var(--m) - .05em); top: 15vh; margin: 0; font-weight: 450; font-size: 14vw; line-height: 1; letter-spacing: -.057em; color: var(--ink); }
   .tags { top: calc(15vh + 18vw); font-size: 10.5px; line-height: 14px; }
   .play .cue, .stack .cue { display: none; }
-  .stack-title { left: calc(var(--m) - .04em); top: 12vh; font-size: 8.8vw; }
-  .stack-tag { top: calc(12vh + 11vw); font-size: 4.4vw; }
-  .stack-groups { top: calc(12vh + 22vw); }
+
+  /* ---------- tech stack on mobile ---------- */
+  .stack-title {
+    position: absolute;
+    left: calc(var(--m) - .04em);
+    top: 11vh;
+    font-size: 7.8vw;
+    line-height: 1;
+    margin: 0;
+  }
+  .stack-tag {
+    position: absolute;
+    left: var(--m);
+    top: calc(11vh + 9.5vw);
+    font-size: 3.6vw;
+    line-height: 1.25;
+    color: var(--aqua);
+    white-space: nowrap;
+    margin: 0;
+  }
+  .stack-segmented {
+    display: flex;
+    position: absolute;
+    left: var(--m);
+    right: var(--m);
+    top: calc(11vh + 17.5vw);
+    background: rgba(255, 255, 255, .08);
+    border-radius: 999px;
+    padding: 3px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .15);
+    z-index: 5;
+  }
+  .seg-btn {
+    flex: 1;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .65);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: all .25s ease;
+  }
+  .seg-btn.active {
+    background: rgba(255, 255, 255, .22);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .35), inset 0 0 0 1px rgba(255, 255, 255, .3);
+  }
+  .stack-groups {
+    position: absolute;
+    left: var(--m);
+    right: var(--m);
+    top: calc(11vh + 27.5vw);
+    display: block;
+    margin: 0;
+  }
+  .stack[data-view="practices"] .stack-groups { display: none; }
   .stack-row { display: block; min-height: 0; }
-  .stack-row + .stack-row { margin-top: 12px; }
-  .stack-label { width: auto; padding: 0; margin-bottom: 6px; font-size: 10px; line-height: 13px; }
-  .techs { gap: 8px 6px; }
-  .tech { width: 50px; }
-  .tile { width: 38px; height: 38px; border-radius: 11px; }
-  .tile img { width: calc(24px * var(--s, 1)); height: calc(24px * var(--s, 1)); }
-  .tech-name { margin-top: 4px; font-size: 8px; line-height: 10px; }
-  .stack-practices { top: auto; bottom: 4vh; display: block; }
-  .stack-practices .stack-label { padding: 0; }
-  .chips { gap: 5px; }
-  .chips li { padding: 4px 8px; font-size: 8.5px; line-height: 11px; }
-  .deck { left: var(--m); top: auto; bottom: 10vh; width: 87.2vw; height: 45vh; }
-  .face { display: flex; flex-direction: column; gap: 12px; padding: 20px 18px; }
+  .stack-row + .stack-row { margin-top: 8px; }
+  .stack-label {
+    width: auto;
+    padding: 0;
+    margin-bottom: 4px;
+    font-size: 9.5px;
+    line-height: 12px;
+    letter-spacing: .05em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--aqua);
+  }
+  .techs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 5px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tech {
+    width: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .tile {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .tile img {
+    width: calc(21px * var(--s, 1));
+    height: calc(21px * var(--s, 1));
+  }
+  .tech-name {
+    margin-top: 3px;
+    font-size: 7.5px;
+    line-height: 9px;
+    text-align: center;
+    max-width: 44px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stack-practices {
+    position: absolute;
+    left: var(--m);
+    right: var(--m);
+    top: calc(11vh + 27.5vw);
+    bottom: auto;
+    display: none;
+    margin: 0;
+    padding: 0;
+  }
+  .stack[data-view="practices"] .stack-practices { display: block; }
+  .stack-practices .stack-label { display: none; }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .chips li {
+    padding: 6px 11px;
+    font-size: 10px;
+    line-height: 13px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .4);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .24);
+    color: rgba(255, 255, 255, .9);
+  }
+
+  /* ---------- card deck stacks on mobile ---------- */
+  .deck {
+    left: var(--m);
+    right: var(--m);
+    width: auto;
+    top: auto;
+    bottom: 8.5vh;
+    height: 48vh;
+  }
+  .card {
+    transform-origin: center top;
+  }
+  .card[data-slot="0"] {
+    transform: none;
+    z-index: 4;
+    opacity: 1;
+    filter: none;
+  }
+  .card[data-slot="1"] {
+    transform: translateY(-9px) scale(.96);
+    z-index: 3;
+    opacity: .65;
+    filter: blur(.8px);
+  }
+  .card[data-slot="2"] {
+    transform: translateY(-18px) scale(.92);
+    z-index: 2;
+    opacity: .35;
+    filter: blur(2px);
+  }
+  .card[data-slot="3"] {
+    transform: translateY(-26px) scale(.88);
+    z-index: 1;
+    opacity: .12;
+    filter: blur(3px);
+  }
+  .card.leaving {
+    z-index: 5;
+    transform: translate(110vw, 0) scale(.95);
+    opacity: 0;
+  }
+  .face {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 16px;
+  }
   .face .card-head, .face .card-row, .face .card-body { position: static; }
   .face .desk { display: none; }
   .face .mob { display: inline; }
   .card-meta .hint.mob { display: block; }
-  .card-head { font-size: 19px; }
-  .card-row { gap: 12px; }
-  .card-btn { width: 40px; height: 40px; }
-  .card-btn svg { width: 18px; height: 18px; }
-  .card-meta { font-size: 10.5px; line-height: 14px; white-space: normal; }
+  .card-head { font-size: 18px; }
+  .card-row { gap: 10px; }
+  .card-btn { width: 38px; height: 38px; }
+  .card-btn svg { width: 17px; height: 17px; }
+  .card-meta { font-size: 10px; line-height: 14px; white-space: normal; }
   .card-body { width: auto; }
-  .card-hook { font-size: 16px; line-height: 21px; }
-  .card-stats { gap: 18px; margin-top: 12px; }
+  .card-hook { font-size: 15px; line-height: 20px; }
+  .card-stats { gap: 14px; margin-top: 10px; }
   .card-stats div:nth-child(3) { display: none; }
-  .card-stats b { font-size: 30px; }
-  .card-stats span { margin-top: 6px; font-size: 9.5px; line-height: 12px; }
-  .card-desc { margin-top: 12px; font-size: 12px; line-height: 17px; }
-  .card-tech { margin-top: 10px; font-size: 10px; line-height: 13px; }
+  .card-stats b { font-size: 28px; }
+  .card-stats span { margin-top: 4px; font-size: 9px; line-height: 12px; }
+  .card-desc { margin-top: 10px; font-size: 11.5px; line-height: 16px; }
+  .card-tech { margin-top: 8px; font-size: 9.5px; line-height: 12px; }
   .back-details { display: none; }
   .back-arch { display: flex; flex: 1; min-height: 0; }
   .back-arch .arch { display: flex; flex-direction: column; align-items: flex-start; width: 100%; min-height: 0; }
   .back-arch figcaption { display: none; }
   .back-arch svg { flex: 1; min-height: 0; width: 100%; margin: 0; }
   .back-arch .try { flex: none; margin-top: 8px; height: 28px; padding: 0 12px; font-size: 10px; }
-  .dots { left: 50vw; top: auto; bottom: 4vh; gap: 22px; }
+  .dots { left: 50vw; top: auto; bottom: 3vh; gap: 20px; }
   .dot { width: 11px; height: 11px; }
-  .contacts .headline { font-size: 17vw; }
-  .contacts .w1 { left: calc(var(--m) - .074em); top: calc(30% - .9em); }
-  .contacts .w2 { right: calc(var(--m) + .05em); top: calc(30% - .08em); font-size: 11.9vw; }
-  .contacts .w3 { right: calc(var(--m) + .05em); top: calc(30% + .3em); }
-  .contacts .info { grid-template-columns: 1fr 1fr; grid-auto-flow: row; }
+
+  /* ---------- contacts and highlighted achievements on mobile ---------- */
+  .contacts .headline { font-size: 13vw; }
+  .contacts .w1 { left: calc(var(--m) - .07em); top: 10vh; }
+  .contacts .w2 { right: calc(var(--m) + .05em); top: calc(10vh + 10.5vw); font-size: 9.6vw; }
+  .contacts .w3 { right: calc(var(--m) + .05em); top: calc(10vh + 20vw); }
+  .contacts .info {
+    bottom: 5vh;
+    left: var(--m);
+    right: var(--m);
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    font-size: 10px;
+    line-height: 13px;
+  }
+  /* Centred in the gap between the headline (10vh + 33vw) and the details, taking the block as ~210px and the details as ~100px. */
+  .achievements { top: calc((100% + 5vh + 33vw - 310px) / 2); }
+  .achieve-label { gap: 12px; font-size: 11px; line-height: 14px; }
+  .achieve-list { grid-template-columns: 1fr; margin-top: 8px; }
+  .achieve { display: grid; grid-template-columns: 116px 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 12px; padding: 12px 0; border-left: 0; border-top: 1px solid rgba(255, 255, 255, .16); }
+  .achieve-result { grid-row: 1 / 3; font-size: 26px; }
+  .achieve-name { margin-top: 0; font-size: 12px; align-self: end; }
+  .achieve-detail { margin-top: 2px; font-size: 10.5px; align-self: start; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .grain, .flowing, .spin, .arch[data-state="crashed"] .cand, .card-btn, .card-btn::after { animation: none !important; }
-  .card, .card-inner, .arch-stage .arch, .tech, .tile, .nav .logo, .nav .link::after { transition-duration: .01s !important; }
-  .tech { transition-delay: 0s !important; }
+  .card, .card-inner, .arch-stage .arch, .tech, .tile, .achieve, .nav .logo, .nav .link::after { transition-duration: .01s !important; }
+  .tech, .achieve { transition-delay: 0s !important; }
 }
 </style>
 <noscript><style>
 html, body { overflow: auto; height: auto; }
-.screens { position: static; opacity: 1 !important; }
+.scroller, .scroll-track { position: static; overflow: visible; }
+.screens { position: static; height: auto; overflow: visible; opacity: 1 !important; }
 .screen { position: relative; height: 100vh; }
 .nav { opacity: 1 !important; }
-.tech { opacity: 1 !important; transform: none !important; }
+.tech, .achieve { opacity: 1 !important; transform: none !important; }
 .no-js-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(45% 40% at 82% 28%, #1d3960 0%, transparent 70%), #010204; }
 </style><div class="no-js-bg"></div></noscript>
 </head>
@@ -373,6 +582,8 @@ html, body { overflow: auto; height: auto; }
   <a class="link l-con" href="#contacts" data-goto="4" data-ring="40">Contacts</a>
 </header>
 
+<div class="scroller" id="scroller">
+<div class="scroll-track" id="scroll-track">
 <main class="screens">
 
   <section class="screen hero" id="home" aria-label="Intro">
@@ -557,9 +768,13 @@ html, body { overflow: auto; height: auto; }
     </div>
   </section>
 
-  <section class="screen stack" id="stack" aria-label="Tech stack">
+  <section class="screen stack" id="stack" aria-label="Tech stack" data-view="tech">
     <h2 class="stack-title" data-speed="1">What I <em>build</em> with</h2>
     <p class="stack-tag" data-speed=".97" data-lead=".4">Never lose a record. Never process one twice.</p>
+    <div class="stack-segmented" role="tablist" aria-label="Tech stack views">
+      <button class="seg-btn active" type="button" data-view="tech" role="tab" aria-selected="true">Technologies (24)</button>
+      <button class="seg-btn" type="button" data-view="practices" role="tab" aria-selected="false">Practices (21)</button>
+    </div>
     <div class="stack-groups" id="stack-groups" data-speed="1.04">
       <noscript><p class="stack-label">Java 17 · Python · Spring Boot · gRPC · GraphQL · AWS · GCP · Docker · Kubernetes · Terraform · Kafka · PostgreSQL</p></noscript>
     </div>
@@ -884,6 +1099,26 @@ html, body { overflow: auto; height: auto; }
         <span class="w w2 accent mb" data-speed="1.12">distributed</span>
         <span class="w w3 mb" data-speed="1.2">systems</span>
       </h2>
+      <div class="achievements" data-speed="1.06" data-lead=".7">
+        <p class="achieve-label">Achievements</p>
+        <ul class="achieve-list">
+          <li class="achieve" style="--i:0">
+            <span class="achieve-result">Rank 148</span>
+            <p class="achieve-name">Google Kick Start</p>
+            <p class="achieve-detail">Global coding competition, 2022</p>
+          </li>
+          <li class="achieve cert" style="--i:1">
+            <span class="achieve-result">Certified</span>
+            <p class="achieve-name">AI Professional</p>
+            <p class="achieve-detail">Oracle Cloud (OCI) Generative AI, 2024</p>
+          </li>
+          <li class="achieve school" style="--i:2">
+            <span class="achieve-result">Completed</span>
+            <p class="achieve-name">Amazon ML Summer School</p>
+            <p class="achieve-detail">Machine learning course by Amazon, 2022</p>
+          </li>
+        </ul>
+      </div>
       <div class="info">
         <div class="col c1">
           <p class="strong" data-speed="1" data-lead=".95">Write me</p>
@@ -897,12 +1132,6 @@ html, body { overflow: auto; height: auto; }
           <p class="strong" data-speed="1" data-lead=".98">Research</p>
           <p class="soft" data-speed=".96" data-lead=".92"><a href="https://doi.org/10.1145/3716640.3716657" target="_blank" rel="noopener">ACE 2025 paper ↗</a></p>
         </div>
-        <div class="col c3">
-          <p class="strong" data-speed="1.02" data-lead="1">Achievements</p>
-          <p class="soft" data-speed=".97" data-lead=".92">Google Kick Start · rank 148<br>OCI Generative AI Professional<br>Amazon ML Summer School ’22<br>→ built a hybrid recommender (RMSE 0.89)</p>
-          <p class="strong" data-speed=".99" data-lead=".95">Design</p>
-          <p class="soft" data-speed=".95" data-lead=".9"><a href="https://dribbble.com/shots/19871911-Landing-Designer-portfolio" target="_blank" rel="noopener">Concept by Purrweb ↗</a></p>
-        </div>
       </div>
       <a class="cue" href="#home" data-goto="0" data-ring="70" data-speed=".95" data-lead=".9" aria-label="Back to the top">
         <svg viewBox="0 0 15 99" preserveAspectRatio="none" aria-hidden="true"><path d="M7.5 0V98M3.6 94.1 7.5 98l3.9-3.9" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
@@ -911,6 +1140,8 @@ html, body { overflow: auto; height: auto; }
   </section>
 
 </main>
+</div>
+</div>
 
 <div class="lens" aria-hidden="true"><i></i></div>
 <div class="grain" aria-hidden="true"></div>
@@ -998,17 +1229,17 @@ html, body { overflow: auto; height: auto; }
     return s;
   });
 
-  /* ---------- screen-to-screen scroll ---------- */
-  // Measured from the shot: 1 s of acceleration to 45 %, then the rest decays exponentially.
-  const TA = 1, PA = 0.45, K = 2.6, TAU = ((1 - PA) * TA) / (PA * K), TOTAL = TA + 4.6 * TAU;
-  const EEND = Math.exp(-(TOTAL - TA) / TAU);
-  const curve = (T) => (T <= 0 ? 0 : T < TA ? PA * Math.pow(T / TA, K) : T >= TOTAL ? 1 : 1 - ((1 - PA) * (Math.exp(-(T - TA) / TAU) - EEND)) / (1 - EEND));
-  const easeOut = (t) => 1 - Math.pow(1 - clamp(t, 0, 1), 3);
+  /* ---------- scrolling ---------- */
+  // #scroller scrolls natively over a track of snap points: one per screen, and one per card on a deck screen, so
+  // scrolling turns a deck's cards over before moving on. Going from one screen to the next takes a full screen of
+  // scrolling, so the page moves with the finger; turning a card takes CARD_SPAN of one.
+  const CARD_SPAN = 0.45;
   const INTRO_TAU = 0.42, INTRO_D = 2.1, INTRO_END = Math.exp(-INTRO_D / INTRO_TAU);
   const introCurve = (T) => (T >= INTRO_D ? 1 : (1 - Math.exp(-T / INTRO_TAU)) / (1 - INTRO_END));
 
-  const nav = $("#nav");
-  let H = innerHeight, y = 0, index = 0, tween = null, intro = 0, introT = null, introDone = false;
+  const nav = $("#nav"), scroller = $("#scroller"), track = $("#scroll-track");
+  let H = innerHeight, y = 0, index = 0, hashAt = 0, intro = 0, introT = null, introDone = false, ready = false;
+  let steps = [], scrollTop = 0, stepPos = 0, navTarget = null;
   doc.style.setProperty("--H", H + "px");
 
   function setActive(i) {
@@ -1016,86 +1247,136 @@ html, body { overflow: auto; height: auto; }
     $$(".link", nav).forEach((a) => a.classList.toggle("active", +a.dataset.goto === i));
   }
 
-  // Each scroll gesture, key press or swipe asks for exactly one step. Requests made while a move is still
-  // playing are counted (up to three) and run in turn as soon as each move allows, so none is lost or doubled.
-  const SCREEN_GAP = reduce ? 350 : 1750, CARD_GAP = reduce ? 200 : 600;
-  let pending = 0, readyAt = 0;
-  function request(dir) {
-    if (!pending && performance.now() >= readyAt) step(dir);
-    else pending = clamp(pending + dir, -3, 3);
+  function buildSteps() {
+    steps = screens.flatMap((s, i) => {
+      const d = deckAt(i);
+      return Array.from({ length: d ? d.cards.length : 1 }, (_, card) => ({ screen: i, card }));
+    });
+    steps.forEach((st) => { st.el = document.createElement("div"); st.el.className = "snap"; track.appendChild(st.el); });
+    decks.forEach((d) => { d.k0 = steps.findIndex((st) => st.screen === d.i); });
+  }
+  function sizeSteps() {
+    let top = 0;
+    steps.forEach((st, k) => {
+      const next = steps[k + 1];
+      st.top = top;
+      st.span = (next && next.screen === st.screen ? CARD_SPAN : 1) * H;
+      st.el.style.top = top + "px";
+      st.el.style.height = st.span + "px";
+      top += st.span;
+    });
+    track.style.height = top + "px";
+  }
+  const firstStep = (i) => steps.findIndex((st) => st.screen === i);
+  const topAt = (pos) => { const k = Math.floor(pos), st = steps[k]; return st.top + (pos - k) * st.span; };
+
+  // How far the scroll has got between two steps sets the screen offset, and later each deck's card.
+  function readScroll() {
+    scrollTop = scroller.scrollTop;
+    const top = clamp(scrollTop, 0, steps[steps.length - 1].top);
+    let k = 0;
+    while (k < steps.length - 1 && top >= steps[k + 1].top) k++;
+    const st = steps[k], next = steps[k + 1] || st, f = next === st ? 0 : (top - st.top) / st.span;
+    stepPos = k + f;
+    y = (st.screen + (next.screen - st.screen) * f) * H;
   }
 
-  // A deck screen opens on its first card, or on its last when it is reached by scrolling back up.
-  function goTo(i, entry) {
-    i = clamp(i, 0, screens.length - 1);
-    if (i === index && !tween) return false;
-    if (i !== index) { const d = deckAt(i); if (d) jumpCard(d, entry === "last" ? d.cards.length - 1 : 0); }
-    index = i;
-    setActive(i);
-    screens[i].el.classList.add("seen");
-    tween = { from: y, to: i * H, t0: performance.now() };
-    readyAt = tween.t0 + SCREEN_GAP;
-    history.replaceState(null, "", i ? "#" + screens[i].el.id : location.pathname + location.search);
-    return true;
-  }
-
-  // Scrolling walks through a deck's cards before leaving its screen, and back through them in reverse.
-  function step(dir) {
-    const d = deckAt(index), n = d ? d.cur + dir : -1;
-    if (d && n >= 0 && n < d.cards.length) { showCard(d, n, dir); return true; }
-    return goTo(index + dir, dir < 0 ? "last" : "first");
-  }
-
-  $$("[data-goto]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); pending = 0; goTo(+a.dataset.goto); }));
-
-  // A trackpad swipe arrives as a burst of wheel events followed by a second or two of inertia. A new gesture
-  // starts after a pause, on a change of direction, or when the deltas climb again after decaying, which inertia
-  // never does. Each gesture fires once, as soon as it has moved far enough.
-  const W = { t: -1e9, dir: 0, acc: 0, fired: false, peak: 0, floor: 0, rise: 0 };
-  addEventListener("wheel", (e) => {
-    if (e.ctrlKey) return;
-    const unit = e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? innerHeight : 1;
-    const dy = e.deltaY * unit;
-    if (!dy || Math.abs(dy) < Math.abs(e.deltaX * unit)) return;
-    e.preventDefault();
-    const now = performance.now(), dir = Math.sign(dy), mag = Math.abs(dy);
-    let fresh = now - W.t > 180 || dir !== W.dir;
-    W.t = now;
-    if (!fresh && W.fired) {
-      if (W.floor < W.peak * 0.7 && mag > W.floor * 2 + 6) fresh = ++W.rise >= 2;
-      else { W.rise = 0; if (mag > W.peak) W.peak = W.floor = mag; else if (mag < W.floor) W.floor = mag; }
+  // The nav follows the screen in view; the address only changes once the scroll comes to rest.
+  function updateIndex() {
+    if (Math.abs(y / H - index) > 0.55) { index = Math.round(y / H); setActive(index); }
+    if (hashAt !== index && Math.abs(y - index * H) < 1) {
+      hashAt = index;
+      history.replaceState(null, "", index ? "#" + screens[index].el.id : location.pathname + location.search);
     }
-    if (fresh) { W.dir = dir; W.acc = 0; W.fired = false; W.rise = 0; }
-    if (W.fired) return;
-    W.acc += mag;
-    if (W.acc >= 30) { W.fired = true; W.peak = W.floor = mag; request(dir); }
-  }, { passive: false });
+  }
 
+  // A deck turns to the card the scroll points at: animated while its screen is in view, at once otherwise.
+  // Turning only past 0.58 of the way keeps a finger resting near half-way from flicking a card back and forth.
+  function syncDecks() {
+    if (navTarget) return;
+    for (const d of decks) {
+      const rel = stepPos - d.k0;
+      if (Math.abs(rel - d.cur) <= 0.58) continue;
+      const n = clamp(Math.round(rel), 0, d.cards.length - 1);
+      if (n === d.cur) continue;
+      const s = screens[d.i];
+      if (s.vis && Math.abs(s.top) < H * 0.5) showCard(d, n, n > d.cur ? 1 : -1);
+      else jumpCard(d, n);
+    }
+  }
+
+  // Links, keys, dots and sideways swipes scroll to a step. Its deck turns at once; decks passed on the way wait.
+  function goToStep(k, dir) {
+    k = clamp(k, 0, steps.length - 1);
+    const st = steps[k], d = deckAt(st.screen), s = screens[st.screen];
+    if (d && st.card !== d.cur) {
+      if (s.vis && Math.abs(s.top) < H * 0.5) showCard(d, st.card, dir || (st.card > d.cur ? 1 : -1));
+      else jumpCard(d, st.card);
+    }
+    navTarget = { k, until: performance.now() + 1500 };
+    scroller.scrollTo({ top: st.top, behavior: reduce ? "auto" : "smooth" });
+  }
+  const turnCard = (d, dir) => goToStep(d.k0 + (d.cur + dir + d.cards.length) % d.cards.length, dir);
+  const nearestStep = () => (navTarget ? navTarget.k : Math.round(stepPos));
+
+  $$("[data-goto]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); goToStep(firstStep(+a.dataset.goto)); }));
+  addEventListener("wheel", () => { navTarget = null; }, { passive: true });
+
+  // Vertical swipes scroll natively. On a deck, a swipe that starts sideways is kept from scrolling and turns the
+  // cards; on the stack screen of a small screen, a sideways swipe switches between technologies and practices.
   let touch = null;
-  addEventListener("touchstart", (e) => { if (e.touches.length === 1) touch = { x: e.touches[0].clientX, y: e.touches[0].clientY, target: e.target }; }, { passive: true });
-  addEventListener("touchmove", (e) => { if (touch && e.touches.length === 1) e.preventDefault(); }, { passive: false });
+  addEventListener("touchstart", (e) => {
+    navTarget = null;
+    touch = e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY, target: e.target, axis: "" } : null;
+  }, { passive: true });
+  $$(".deck").forEach((el) => el.addEventListener("touchmove", (e) => {
+    if (!touch || e.touches.length !== 1) return;
+    if (!touch.axis) {
+      const dx = e.touches[0].clientX - touch.x, dy = e.touches[0].clientY - touch.y;
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      touch.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+    }
+    if (touch.axis === "x" && e.cancelable) e.preventDefault();
+  }, { passive: false }));
   addEventListener("touchend", (e) => {
     if (!touch) return;
     const t = e.changedTouches[0], dy = touch.y - t.clientY, dx = touch.x - t.clientX, d = decks.find((x) => x.el.contains(touch.target));
+    const sideways = Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2, axis = touch.axis;
     touch = null;
-    if (Math.abs(dy) > 46 && Math.abs(dy) > Math.abs(dx)) request(Math.sign(dy));
-    else if (d && Math.abs(dx) > 46) showCard(d, d.cur + Math.sign(dx), Math.sign(dx));
+    if (d) { if (axis === "x" && sideways) turnCard(d, Math.sign(dx)); }
+    else if (sideways && innerWidth <= 760 && index === 2) setStackView(dx > 0 ? "practices" : "tech");
+  });
+  addEventListener("touchcancel", () => { touch = null; }, { passive: true });
+
+  /* ---------- stack segmented tabs on mobile ---------- */
+  function setStackView(view) {
+    const stk = $("#stack");
+    if (!stk) return;
+    stk.dataset.view = view;
+    $$(".seg-btn", stk).forEach((b) => {
+      const on = b.dataset.view === view;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+  }
+  $$(".seg-btn").forEach((btn) => {
+    btn.addEventListener("click", () => setStackView(btn.dataset.view));
   });
 
   addEventListener("keydown", (e) => {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const k = e.key, onControl = e.target.closest && e.target.closest("a, button"), d = deckAt(index);
-    if (k === "ArrowDown" || k === "PageDown" || (k === " " && !onControl)) { e.preventDefault(); if (!e.repeat) request(1); }
-    else if (k === "ArrowUp" || k === "PageUp") { e.preventDefault(); if (!e.repeat) request(-1); }
-    else if (k === "Home") { e.preventDefault(); pending = 0; goTo(0); }
-    else if (k === "End") { e.preventDefault(); pending = 0; goTo(screens.length - 1); }
-    else if (d && (k === "ArrowRight" || k === "ArrowLeft")) { const dir = k === "ArrowRight" ? 1 : -1; showCard(d, d.cur + dir, dir); }
+    if (k === "ArrowDown" || k === "PageDown" || (k === " " && !onControl)) { e.preventDefault(); if (!e.repeat) goToStep(nearestStep() + 1); }
+    else if (k === "ArrowUp" || k === "PageUp") { e.preventDefault(); if (!e.repeat) goToStep(nearestStep() - 1); }
+    else if (k === "Home") { e.preventDefault(); goToStep(0); }
+    else if (k === "End") { e.preventDefault(); goToStep(steps.length - 1); }
+    else if (d && (k === "ArrowRight" || k === "ArrowLeft")) turnCard(d, k === "ArrowRight" ? 1 : -1);
   });
 
   document.addEventListener("focusin", (e) => {
     const s = e.target.closest && e.target.closest(".screen");
     const i = screens.findIndex((x) => x.el === s);
-    if (i >= 0 && i !== index) goTo(i);
+    if (i >= 0 && i !== index) { const d = deckAt(i); goToStep(firstStep(i) + (d ? d.cur : 0)); }
   });
 
   /* ---------- layout per frame: screen offsets, parallax, motion blur ---------- */
@@ -1108,6 +1389,7 @@ html, body { overflow: auto; height: auto; }
       if (vis !== s.vis) { s.el.style.visibility = vis ? "" : "hidden"; s.vis = vis; }
       s.top = top;
       if (!vis) continue;
+      if (ready && !s.seen && Math.abs(top) < H * 0.75) { s.seen = true; s.el.classList.add("seen"); }
       s.el.style.transform = `translate3d(0,${top.toFixed(2)}px,0)`;
       const rel = top / H;
       for (const it of s.items) {
@@ -1196,7 +1478,7 @@ html, body { overflow: auto; height: auto; }
         tx = r.left + r.width / 2; ty = r.top + r.height / 2;
         tr = (+ringEl.dataset.ring || 70) * u;
       }
-    } else if (mode === "attract" && introDone && index === 0 && !tween) {
+    } else if (mode === "attract" && introDone && y < 1) {
       const p = attractAt(now);
       tx = p.x; ty = p.y + screens[0].top; tr = p.r * u; vis = 1;
     }
@@ -1254,12 +1536,12 @@ html, body { overflow: auto; height: auto; }
     const screen = el.closest(".screen");
     const d = { el, i: screens.findIndex((s) => s.el === screen), cards: $$(".card", el), dots: $$(".dot", screen), figs: $$(".arch-stage .arch", screen), cur: 0 };
     d.cards.forEach((c, k) => { c.dataset.slot = String(k); c.inert = k !== 0; });
-    d.dots.forEach((dot, k) => dot.addEventListener("click", () => showCard(d, k, k > d.cur ? 1 : -1)));
+    d.dots.forEach((dot, k) => dot.addEventListener("click", () => goToStep(d.k0 + k, k > d.cur ? 1 : -1)));
     screen.addEventListener("click", (e) => {
       if (e.target.closest("a, button") || inside(d.cards[d.cur], e)) return;
       const hit = d.cards.filter((c) => c !== d.cards[d.cur] && !c.classList.contains("leaving") && +c.dataset.slot < 3)
         .sort((a, b) => a.dataset.slot - b.dataset.slot).find((c) => inside(c, e));
-      if (hit) showCard(d, d.cards.indexOf(hit), 1);
+      if (hit) goToStep(d.k0 + d.cards.indexOf(hit), 1);
     });
     showFig(d);
     return d;
@@ -1274,7 +1556,6 @@ html, body { overflow: auto; height: auto; }
     const count = d.cards.length;
     n = (n + count) % count;
     if (n === d.cur) return;
-    readyAt = performance.now() + CARD_GAP;
     const out = d.cards[d.cur], into = d.cards[n];
     d.cur = n;
     markDots(d);
@@ -1491,36 +1772,40 @@ html, body { overflow: auto; height: auto; }
   function frame(now) {
     const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
     last = now;
-    if (pending && now >= readyAt) { const dir = Math.sign(pending); pending -= dir; step(dir); }
-    if (tween) {
-      const T = (now - tween.t0) / 1000;
-      const p = reduce ? easeOut(T / 0.45) : curve(T);
-      y = tween.from + (tween.to - tween.from) * p;
-      if (p >= 1) { y = tween.to; tween = null; }
-    }
+    readScroll();
+    if (navTarget && (Math.abs(scrollTop - steps[navTarget.k].top) < 2 || now > navTarget.until)) navTarget = null;
+    updateIndex();
     if (introT !== null) {
       const p = introCurve((now - introT) / 1000);
       intro = H * 0.62 * (1 - p);
       if (p >= 1) { intro = 0; introT = null; introDone = true; attractT0 = now; AP = null; }
     }
     layout(dt);
+    syncDecks();
     updateLens(dt, now);
     drawBg(now);
     requestAnimationFrame(frame);
   }
 
   addEventListener("resize", () => {
+    const at = stepPos;
     H = innerHeight;
     doc.style.setProperty("--H", H + "px");
-    if (tween) tween.to = index * H; else y = index * H;
+    sizeSteps();
+    scroller.scrollTop = topAt(at);
+    readScroll();
     sizeCanvas();
     scaleFilters();
     AP = null;
   });
 
   /* ---------- start ---------- */
+  buildSteps();
+  sizeSteps();
   const start = location.hash ? screens.findIndex((s) => "#" + s.el.id === location.hash) : 0;
-  if (start > 0) { index = start; y = start * H; }
+  if (start > 0) scroller.scrollTop = steps[firstStep(start)].top;
+  readScroll();
+  index = hashAt = Math.round(y / H);
   setActive(index);
   sizeCanvas();
   scaleFilters();
@@ -1533,7 +1818,7 @@ html, body { overflow: auto; height: auto; }
   Promise.race([fontsReady, new Promise((r) => setTimeout(r, 2500))]).then(() => {
     doc.classList.remove("is-loading");
     doc.classList.add("bg-on");
-    screens[index].el.classList.add("seen");
+    ready = true;
     if (index === 0 && !reduce) { introT = performance.now(); intro = H * 0.62; layout(1 / 60); }
     else introDone = true;
   });
